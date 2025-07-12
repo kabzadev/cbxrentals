@@ -8,9 +8,9 @@ interface AuthState {
   logout: () => void;
 }
 
-// TEMPORARY HARDCODED VALUES FOR TESTING
-const AUTH_USERNAME = 'cbxadmin';
-const AUTH_PASSWORD = 'CBX2024$ecure!';
+// Get auth credentials from environment variables
+const AUTH_USERNAME = import.meta.env.VITE_AUTH_USERNAME || 'cbxadmin';
+const AUTH_PASSWORD = import.meta.env.VITE_AUTH_PASSWORD;
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -19,10 +19,16 @@ export const useAuthStore = create<AuthState>()(
       username: null,
       
       login: (username: string, password: string) => {
-        console.log('Login attempt with hardcoded values');
-        console.log('Trying:', username, 'Expected:', AUTH_USERNAME);
-        console.log('Password match:', password === AUTH_PASSWORD);
+        // Debug logging
+        console.log('Login attempt:', { username });
+        console.log('Expected username:', AUTH_USERNAME);
+        console.log('Expected password exists:', !!AUTH_PASSWORD);
+        console.log('Environment check:', {
+          hasUsername: !!import.meta.env.VITE_AUTH_USERNAME,
+          hasPassword: !!import.meta.env.VITE_AUTH_PASSWORD
+        });
         
+        // Check credentials against environment variables
         if (username === AUTH_USERNAME && password === AUTH_PASSWORD) {
           set({ isAuthenticated: true, username });
           return true;

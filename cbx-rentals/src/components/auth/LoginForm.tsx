@@ -34,8 +34,8 @@ export function LoginForm() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: '',
-      password: '',
+      username: 'cbxadmin',
+      password: 'CBX2024$ecure!',
     },
   });
 

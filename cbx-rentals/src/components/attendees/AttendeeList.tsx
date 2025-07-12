@@ -61,9 +61,8 @@ export function AttendeeList() {
     totalPages,
     setPage
   } = useAttendees({
-    page: 1,
     pageSize: 20,
-    filters: { ...filters, search: debouncedSearch }
+    filters: useMemo(() => ({ ...filters, search: debouncedSearch }), [filters.paymentStatus, filters.transportationNeeds, filters.propertyId, debouncedSearch])
   })
 
   const clearFilters = () => {

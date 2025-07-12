@@ -112,7 +112,7 @@ export function useAttendees({
 
   useEffect(() => {
     fetchAttendees()
-  }, [fetchAttendees])
+  }, [currentPage, pageSize, filters.search, filters.propertyId, filters.paymentStatus, filters.transportationNeeds])
 
   const updatePaymentStatus = useCallback(async (bookingId: string, paid: boolean) => {
     try {
