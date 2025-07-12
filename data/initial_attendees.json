@@ -1,0 +1,194 @@
+{
+  "properties": [
+    {
+      "house_number": 1,
+      "total_cost": 5302.99,
+      "name": "Property 1"
+    },
+    {
+      "house_number": 2,
+      "total_cost": 4974.42,
+      "name": "Property 2"
+    },
+    {
+      "house_number": 3,
+      "total_cost": 4768.86,
+      "name": "Property 3"
+    },
+    {
+      "house_number": 4,
+      "total_cost": 2234.71,
+      "name": "Property 4"
+    }
+  ],
+  "attendees": [
+    {
+      "name": "Zach Forsythe",
+      "house_number": 1,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Robert Steinberg",
+      "house_number": 1,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Keith Kabza",
+      "house_number": 1,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Joel Eliaz",
+      "house_number": 1,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Alexander Hernandez",
+      "house_number": 1,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Dr. James Longobardi",
+      "house_number": 1,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-13",
+      "individual_cost": 630.00
+    },
+    {
+      "name": "Pirmin Guolo",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "J. Faignant",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-12",
+      "individual_cost": 450.00
+    },
+    {
+      "name": "Kent Riddle",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Dwayne Anderson",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Rob Williams",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "David Carter",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Chris McCarthy",
+      "house_number": 2,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Perry Roelofs",
+      "house_number": 3,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Peter Spadaro",
+      "house_number": 3,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Gordon Margerum",
+      "house_number": 3,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Damon Powell",
+      "house_number": 3,
+      "arrival_date": "2024-09-10",
+      "departure_date": "2024-09-14",
+      "individual_cost": 830.00
+    },
+    {
+      "name": "Daniel Stewart",
+      "house_number": 3,
+      "arrival_date": "2024-09-11",
+      "departure_date": "2024-09-14",
+      "individual_cost": 630.00
+    },
+    {
+      "name": "Denny T",
+      "house_number": 3,
+      "arrival_date": "2024-09-11",
+      "departure_date": "2024-09-14",
+      "individual_cost": 630.00
+    },
+    {
+      "name": "Timothy Schrader",
+      "house_number": 3,
+      "arrival_date": "2024-09-12",
+      "departure_date": "2024-09-14",
+      "individual_cost": 400.00
+    },
+    {
+      "name": "Eric Kessler",
+      "house_number": 4,
+      "arrival_date": "2024-09-11",
+      "departure_date": "2024-09-13",
+      "individual_cost": 450.00
+    },
+    {
+      "name": "Isaac De La Sierria",
+      "house_number": 4,
+      "arrival_date": "2024-09-11",
+      "departure_date": "2024-09-13",
+      "individual_cost": 450.00
+    },
+    {
+      "name": "Tyler Craig",
+      "house_number": 4,
+      "arrival_date": "2024-09-11",
+      "departure_date": "2024-09-13",
+      "individual_cost": 450.00
+    },
+    {
+      "name": "Paul Bird",
+      "house_number": 4,
+      "arrival_date": "2024-09-11",
+      "departure_date": "2024-09-13",
+      "individual_cost": 450.00
+    }
+  ]
+}
