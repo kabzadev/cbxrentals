@@ -35,168 +35,216 @@
       "house_number": 1,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "zach.forsythe@email.com",
+      "phone": "(555) 000-0001"
     },
     {
       "name": "Robert Steinberg",
       "house_number": 1,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "robert.steinberg@email.com",
+      "phone": "(555) 000-0002"
     },
     {
       "name": "Keith Kabza",
       "house_number": 1,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "keith.kabza@email.com",
+      "phone": "(555) 000-0003"
     },
     {
       "name": "Joel Eliaz",
       "house_number": 1,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "joel.eliaz@email.com",
+      "phone": "(555) 000-0004"
     },
     {
       "name": "Alexander Hernandez",
       "house_number": 1,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "alexander.hernandez@email.com",
+      "phone": "(555) 000-0005"
     },
     {
       "name": "Dr. James Longobardi",
       "house_number": 1,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-13",
-      "individual_cost": 630.00
+      "individual_cost": 630,
+      "email": "dr.longobardi@email.com",
+      "phone": "(555) 000-0006"
     },
     {
       "name": "Pirmin Guolo",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "pirmin.guolo@email.com",
+      "phone": "(555) 000-0007"
     },
     {
       "name": "J. Faignant",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-12",
-      "individual_cost": 450.00
+      "individual_cost": 450,
+      "email": "j.faignant@email.com",
+      "phone": "(555) 000-0008"
     },
     {
       "name": "Kent Riddle",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "kent.riddle@email.com",
+      "phone": "(555) 000-0009"
     },
     {
       "name": "Dwayne Anderson",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "dwayne.anderson@email.com",
+      "phone": "(555) 000-0010"
     },
     {
       "name": "Rob Williams",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "rob.williams@email.com",
+      "phone": "(555) 000-0011"
     },
     {
       "name": "David Carter",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "david.carter@email.com",
+      "phone": "(555) 000-0012"
     },
     {
       "name": "Chris McCarthy",
       "house_number": 2,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "chris.mccarthy@email.com",
+      "phone": "(555) 000-0013"
     },
     {
       "name": "Perry Roelofs",
       "house_number": 3,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "perry.roelofs@email.com",
+      "phone": "(555) 000-0014"
     },
     {
       "name": "Peter Spadaro",
       "house_number": 3,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "peter.spadaro@email.com",
+      "phone": "(555) 000-0015"
     },
     {
       "name": "Gordon Margerum",
       "house_number": 3,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "gordon.margerum@email.com",
+      "phone": "(555) 000-0016"
     },
     {
       "name": "Damon Powell",
       "house_number": 3,
       "arrival_date": "2024-09-10",
       "departure_date": "2024-09-14",
-      "individual_cost": 830.00
+      "individual_cost": 830,
+      "email": "damon.powell@email.com",
+      "phone": "(555) 000-0017"
     },
     {
       "name": "Daniel Stewart",
       "house_number": 3,
       "arrival_date": "2024-09-11",
       "departure_date": "2024-09-14",
-      "individual_cost": 630.00
+      "individual_cost": 630,
+      "email": "daniel.stewart@email.com",
+      "phone": "(555) 000-0018"
     },
     {
       "name": "Denny T",
       "house_number": 3,
       "arrival_date": "2024-09-11",
       "departure_date": "2024-09-14",
-      "individual_cost": 630.00
+      "individual_cost": 630,
+      "email": "denny.t@email.com",
+      "phone": "(555) 000-0019"
     },
     {
       "name": "Timothy Schrader",
       "house_number": 3,
       "arrival_date": "2024-09-12",
       "departure_date": "2024-09-14",
-      "individual_cost": 400.00
+      "individual_cost": 400,
+      "email": "timothy.schrader@email.com",
+      "phone": "(555) 000-0020"
     },
     {
       "name": "Eric Kessler",
       "house_number": 4,
       "arrival_date": "2024-09-11",
       "departure_date": "2024-09-13",
-      "individual_cost": 450.00
+      "individual_cost": 450,
+      "email": "eric.kessler@email.com",
+      "phone": "(555) 000-0021"
     },
     {
       "name": "Isaac De La Sierria",
       "house_number": 4,
       "arrival_date": "2024-09-11",
       "departure_date": "2024-09-13",
-      "individual_cost": 450.00
+      "individual_cost": 450,
+      "email": "isaac.sierria@email.com",
+      "phone": "(555) 000-0022"
     },
     {
       "name": "Tyler Craig",
       "house_number": 4,
       "arrival_date": "2024-09-11",
       "departure_date": "2024-09-13",
-      "individual_cost": 450.00
+      "individual_cost": 450,
+      "email": "tyler.craig@email.com",
+      "phone": "(555) 000-0023"
     },
     {
       "name": "Paul Bird",
       "house_number": 4,
       "arrival_date": "2024-09-11",
       "departure_date": "2024-09-13",
-      "individual_cost": 450.00
+      "individual_cost": 450,
+      "email": "paul.bird@email.com",
+      "phone": "(555) 000-0024"
     }
   ]
 }
