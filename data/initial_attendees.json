@@ -3,22 +3,26 @@
     {
       "house_number": 1,
       "total_cost": 5302.99,
-      "name": "Property 1"
+      "name": "Property 1",
+      "listing_url": "https://bit.ly/4ln5IJE"
     },
     {
       "house_number": 2,
       "total_cost": 4974.42,
-      "name": "Property 2"
+      "name": "Property 2",
+      "listing_url": "https://bit.ly/3TVueWx"
     },
     {
       "house_number": 3,
       "total_cost": 4768.86,
-      "name": "Property 3"
+      "name": "Property 3",
+      "listing_url": "https://bit.ly/4kF1jkn"
     },
     {
       "house_number": 4,
       "total_cost": 2234.71,
-      "name": "Property 4"
+      "name": "Property 4",
+      "listing_url": "https://bit.ly/3IpQfKi"
     }
   ],
   "attendees": [
