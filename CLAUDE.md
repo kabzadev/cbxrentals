@@ -77,6 +77,8 @@ cbx-rentals/
 - name: text
 - email: text
 - phone: text
+- has_rental_car: boolean (default false)
+- needs_airport_pickup: boolean (default false)
 - created_at: timestamp
 ```
 

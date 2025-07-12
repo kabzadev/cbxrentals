@@ -37,7 +37,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "zach.forsythe@email.com",
-      "phone": "(555) 000-0001"
+      "phone": "(555) 000-0001",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Robert Steinberg",
@@ -46,7 +48,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "robert.steinberg@email.com",
-      "phone": "(555) 000-0002"
+      "phone": "(555) 000-0002",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Keith Kabza",
@@ -55,7 +59,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "keith.kabza@email.com",
-      "phone": "(555) 000-0003"
+      "phone": "(555) 000-0003",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Joel Eliaz",
@@ -64,7 +70,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "joel.eliaz@email.com",
-      "phone": "(555) 000-0004"
+      "phone": "(555) 000-0004",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Alexander Hernandez",
@@ -73,7 +81,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "alexander.hernandez@email.com",
-      "phone": "(555) 000-0005"
+      "phone": "(555) 000-0005",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Dr. James Longobardi",
@@ -82,7 +92,9 @@
       "departure_date": "2024-09-13",
       "individual_cost": 630,
       "email": "dr.longobardi@email.com",
-      "phone": "(555) 000-0006"
+      "phone": "(555) 000-0006",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Pirmin Guolo",
@@ -91,7 +103,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "pirmin.guolo@email.com",
-      "phone": "(555) 000-0007"
+      "phone": "(555) 000-0007",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "J. Faignant",
@@ -100,7 +114,9 @@
       "departure_date": "2024-09-12",
       "individual_cost": 450,
       "email": "j.faignant@email.com",
-      "phone": "(555) 000-0008"
+      "phone": "(555) 000-0008",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Kent Riddle",
@@ -109,7 +125,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "kent.riddle@email.com",
-      "phone": "(555) 000-0009"
+      "phone": "(555) 000-0009",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Dwayne Anderson",
@@ -118,7 +136,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "dwayne.anderson@email.com",
-      "phone": "(555) 000-0010"
+      "phone": "(555) 000-0010",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Rob Williams",
@@ -127,7 +147,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "rob.williams@email.com",
-      "phone": "(555) 000-0011"
+      "phone": "(555) 000-0011",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "David Carter",
@@ -136,7 +158,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "david.carter@email.com",
-      "phone": "(555) 000-0012"
+      "phone": "(555) 000-0012",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Chris McCarthy",
@@ -145,7 +169,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "chris.mccarthy@email.com",
-      "phone": "(555) 000-0013"
+      "phone": "(555) 000-0013",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Perry Roelofs",
@@ -154,7 +180,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "perry.roelofs@email.com",
-      "phone": "(555) 000-0014"
+      "phone": "(555) 000-0014",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Peter Spadaro",
@@ -163,7 +191,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "peter.spadaro@email.com",
-      "phone": "(555) 000-0015"
+      "phone": "(555) 000-0015",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Gordon Margerum",
@@ -172,7 +202,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "gordon.margerum@email.com",
-      "phone": "(555) 000-0016"
+      "phone": "(555) 000-0016",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Damon Powell",
@@ -181,7 +213,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 830,
       "email": "damon.powell@email.com",
-      "phone": "(555) 000-0017"
+      "phone": "(555) 000-0017",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Daniel Stewart",
@@ -190,7 +224,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 630,
       "email": "daniel.stewart@email.com",
-      "phone": "(555) 000-0018"
+      "phone": "(555) 000-0018",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Denny T",
@@ -199,7 +235,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 630,
       "email": "denny.t@email.com",
-      "phone": "(555) 000-0019"
+      "phone": "(555) 000-0019",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Timothy Schrader",
@@ -208,7 +246,9 @@
       "departure_date": "2024-09-14",
       "individual_cost": 400,
       "email": "timothy.schrader@email.com",
-      "phone": "(555) 000-0020"
+      "phone": "(555) 000-0020",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Eric Kessler",
@@ -217,7 +257,9 @@
       "departure_date": "2024-09-13",
       "individual_cost": 450,
       "email": "eric.kessler@email.com",
-      "phone": "(555) 000-0021"
+      "phone": "(555) 000-0021",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Isaac De La Sierria",
@@ -226,7 +268,9 @@
       "departure_date": "2024-09-13",
       "individual_cost": 450,
       "email": "isaac.sierria@email.com",
-      "phone": "(555) 000-0022"
+      "phone": "(555) 000-0022",
+      "has_rental_car": true,
+      "needs_airport_pickup": false
     },
     {
       "name": "Tyler Craig",
@@ -235,7 +279,9 @@
       "departure_date": "2024-09-13",
       "individual_cost": 450,
       "email": "tyler.craig@email.com",
-      "phone": "(555) 000-0023"
+      "phone": "(555) 000-0023",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     },
     {
       "name": "Paul Bird",
@@ -244,7 +290,9 @@
       "departure_date": "2024-09-13",
       "individual_cost": 450,
       "email": "paul.bird@email.com",
-      "phone": "(555) 000-0024"
+      "phone": "(555) 000-0024",
+      "has_rental_car": false,
+      "needs_airport_pickup": true
     }
   ]
 }
