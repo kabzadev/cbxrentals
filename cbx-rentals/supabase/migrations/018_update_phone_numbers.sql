@@ -1,0 +1,24 @@
+-- Update phone numbers for all CBX attendees
+UPDATE attendees SET phone = '4406653628' WHERE name = 'Zach Forsythe';
+UPDATE attendees SET phone = '8322702627' WHERE name = 'Joel Eliaz';
+UPDATE attendees SET phone = '7173649848' WHERE name = 'Alexander Hernandez';
+UPDATE attendees SET phone = '6199725501' WHERE name = 'Dr. James Longobardi';
+UPDATE attendees SET phone = '7149751091' WHERE name = 'Robert Steinberg';
+UPDATE attendees SET phone = '7274538333' WHERE name = 'Keith Kabza';
+UPDATE attendees SET phone = '7966458777' WHERE name = 'Pirmin Guolo';
+UPDATE attendees SET phone = '5072719155' WHERE name = 'J. Faignant';
+UPDATE attendees SET phone = '4065312847' WHERE name = 'Dwayne Anderson';
+UPDATE attendees SET phone = '6146074225' WHERE name = 'David Carter';
+UPDATE attendees SET phone = '7028108665' WHERE name = 'Chris McCarthy';
+UPDATE attendees SET phone = '7027548583' WHERE name = 'Perry Roelofs';
+UPDATE attendees SET phone = '8456560829' WHERE name = 'Peter Spadaro';
+UPDATE attendees SET phone = '5555555555' WHERE name = 'Gordon Margerum';
+UPDATE attendees SET phone = '4077659440' WHERE name = 'Damon Powell';
+UPDATE attendees SET phone = '5622014190' WHERE name = 'Daniel Stewart';
+UPDATE attendees SET phone = '5555555555' WHERE name = 'Denny T';
+UPDATE attendees SET phone = '4198066789' WHERE name = 'Timothy Schrader';
+UPDATE attendees SET phone = '5555555555' WHERE name = 'Eric Kessler';
+UPDATE attendees SET phone = '5555555555' WHERE name = 'Isaac De La Sierria';
+UPDATE attendees SET phone = '3605182903' WHERE name = 'Rob Williams';
+UPDATE attendees SET phone = '8312385388' WHERE name = 'Tyler Craig';
+UPDATE attendees SET phone = '9097675808' WHERE name = 'Paul Bird';

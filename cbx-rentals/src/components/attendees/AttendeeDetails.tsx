@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import { ArrowLeft, Car, Plane, Check, X } from 'lucide-react'
+import { ArrowLeft, Car, Check, X, Users } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { useToast } from '../ui/use-toast'
+import { FlightInformation } from './FlightInformation'
+import { formatPhoneNumber } from '../../lib/formatters'
 import type { AttendeeWithBookings } from '../../types'
 
 export function AttendeeDetails() {
@@ -125,15 +127,9 @@ export function AttendeeDetails() {
           <CardDescription>Attendee Information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Email</p>
-              <p>{attendee.email}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Phone</p>
-              <p>{attendee.phone}</p>
-            </div>
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">Phone</p>
+            <p>{formatPhoneNumber(attendee.phone)}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -145,19 +141,22 @@ export function AttendeeDetails() {
                   Has Rental Car
                 </Badge>
               )}
-              {attendee.needs_airport_pickup && (
+              {attendee.interested_in_carpool && (
                 <Badge variant="outline">
-                  <Plane className="mr-1 h-3 w-3" />
-                  Needs Airport Pickup
+                  <Users className="mr-1 h-3 w-3" />
+                  Interested in Ride Sharing
                 </Badge>
               )}
-              {!attendee.has_rental_car && !attendee.needs_airport_pickup && (
+              {!attendee.has_rental_car && !attendee.interested_in_carpool && (
                 <span className="text-sm text-muted-foreground">Not specified</span>
               )}
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Flight Information */}
+      <FlightInformation attendee={attendee} />
 
       {/* Payment Summary */}
       <Card>
@@ -203,6 +202,7 @@ export function AttendeeDetails() {
                       <p className="text-sm text-muted-foreground">
                         {booking.property?.address}
                       </p>
+                      
                       <div className="flex gap-4 text-sm">
                         <div>
                           <span className="font-medium">Check-in:</span>{' '}

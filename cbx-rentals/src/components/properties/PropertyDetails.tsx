@@ -8,6 +8,7 @@ import {
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { formatPhoneNumber } from '../../lib/formatters';
 import { 
   HomeIcon, 
   MapPinIcon, 
@@ -147,12 +148,8 @@ export function PropertyDetails({ property, open, onOpenChange }: PropertyDetail
                             )}
                           </div>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <MailIcon className="h-3 w-3" />
-                            {booking.attendee.email}
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <PhoneIcon className="h-3 w-3" />
-                            {booking.attendee.phone}
+                            {formatPhoneNumber(booking.attendee.phone)}
                           </div>
                         </div>
                         <div className="text-right text-sm">

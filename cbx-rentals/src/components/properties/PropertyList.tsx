@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PropertyCard } from './PropertyCard';
-import { PropertyDetails } from './PropertyDetails';
 import { Skeleton } from '../ui/skeleton';
 import { Card, CardContent } from '../ui/card';
 import { useProperties } from '../../hooks/useProperties';
@@ -8,13 +7,11 @@ import type { PropertyWithBookings } from '../../hooks/useProperties';
 import { AlertCircleIcon } from 'lucide-react';
 
 export function PropertyList() {
+  const navigate = useNavigate();
   const { properties, loading, error } = useProperties();
-  const [selectedProperty, setSelectedProperty] = useState<PropertyWithBookings | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const handlePropertyClick = (property: PropertyWithBookings) => {
-    setSelectedProperty(property);
-    setDetailsOpen(true);
+    navigate(`/properties/${property.id}`);
   };
 
   if (loading) {
@@ -87,12 +84,6 @@ export function PropertyList() {
           />
         ))}
       </div>
-
-      <PropertyDetails
-        property={selectedProperty}
-        open={detailsOpen}
-        onOpenChange={setDetailsOpen}
-      />
     </>
   );
 }

@@ -1,0 +1,92 @@
+import { createClient } from '@supabase/supabase-js';
+
+// You'll need to replace these with your actual Supabase credentials
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+async function resetKeithStatus() {
+  try {
+    // Find Keith Kabza
+    const { data: attendees, error: findError } = await supabase
+      .from('attendees')
+      .select('id, name, checked_in')
+      .ilike('name', '%keith%kabza%');
+
+    if (findError) {
+      console.error('Error finding attendee:', findError);
+      return;
+    }
+
+    if (!attendees || attendees.length === 0) {
+      console.log('No attendee found with name matching "Keith Kabza"');
+      return;
+    }
+
+    const keith = attendees[0];
+    console.log('Found attendee:', keith);
+
+    // Reset check-in status
+    const { error: attendeeError } = await supabase
+      .from('attendees')
+      .update({ 
+        checked_in: false,
+        check_in_time: null
+      })
+      .eq('id', keith.id);
+
+    if (attendeeError) {
+      console.error('Error updating attendee:', attendeeError);
+      return;
+    }
+
+    console.log('✓ Reset check-in status');
+
+    // Reset payment status
+    const { error: bookingError } = await supabase
+      .from('bookings')
+      .update({ paid: false })
+      .eq('attendee_id', keith.id);
+
+    if (bookingError) {
+      console.error('Error updating booking:', bookingError);
+      return;
+    }
+
+    console.log('✓ Reset payment status');
+
+    // Verify the changes
+    const { data: verification, error: verifyError } = await supabase
+      .from('attendees')
+      .select(`
+        name,
+        checked_in,
+        check_in_time,
+        bookings (
+          paid,
+          total_amount
+        )
+      `)
+      .eq('id', keith.id)
+      .single();
+
+    if (verifyError) {
+      console.error('Error verifying:', verifyError);
+      return;
+    }
+
+    console.log('\nVerification - Current status:');
+    console.log('Name:', verification.name);
+    console.log('Checked In:', verification.checked_in);
+    console.log('Check In Time:', verification.check_in_time);
+    console.log('Payment Status:', verification.bookings[0]?.paid ? 'Paid' : 'Unpaid');
+    console.log('Amount:', verification.bookings[0]?.total_amount);
+
+  } catch (error) {
+    console.error('Unexpected error:', error);
+  }
+}
+
+// Run the reset
+resetKeithStatus();

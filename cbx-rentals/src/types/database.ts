@@ -19,6 +19,10 @@ export interface Database {
           max_occupancy: number
           price_per_night: number
           listing_url?: string | null
+          bedrooms?: number
+          bathrooms?: number
+          sleeps?: number
+          property_type?: string
           created_at: string
         }
         Insert: {
@@ -30,6 +34,10 @@ export interface Database {
           max_occupancy: number
           price_per_night: number
           listing_url?: string | null
+          bedrooms?: number
+          bathrooms?: number
+          sleeps?: number
+          property_type?: string
           created_at?: string
         }
         Update: {
@@ -41,6 +49,10 @@ export interface Database {
           max_occupancy?: number
           price_per_night?: number
           listing_url?: string | null
+          bedrooms?: number
+          bathrooms?: number
+          sleeps?: number
+          property_type?: string
           created_at?: string
         }
       }
@@ -52,6 +64,15 @@ export interface Database {
           phone: string
           has_rental_car: boolean
           needs_airport_pickup: boolean
+          arrival_airline?: string | null
+          arrival_flight_number?: string | null
+          arrival_time?: string | null
+          departure_airline?: string | null
+          departure_flight_number?: string | null
+          departure_time?: string | null
+          interested_in_carpool?: boolean
+          checked_in: boolean
+          check_in_time?: string | null
           created_at: string
         }
         Insert: {
@@ -61,6 +82,15 @@ export interface Database {
           phone: string
           has_rental_car?: boolean
           needs_airport_pickup?: boolean
+          arrival_airline?: string | null
+          arrival_flight_number?: string | null
+          arrival_time?: string | null
+          departure_airline?: string | null
+          departure_flight_number?: string | null
+          departure_time?: string | null
+          interested_in_carpool?: boolean
+          checked_in?: boolean
+          check_in_time?: string | null
           created_at?: string
         }
         Update: {
@@ -70,6 +100,15 @@ export interface Database {
           phone?: string
           has_rental_car?: boolean
           needs_airport_pickup?: boolean
+          arrival_airline?: string | null
+          arrival_flight_number?: string | null
+          arrival_time?: string | null
+          departure_airline?: string | null
+          departure_flight_number?: string | null
+          departure_time?: string | null
+          interested_in_carpool?: boolean
+          checked_in?: boolean
+          check_in_time?: string | null
           created_at?: string
         }
       }
