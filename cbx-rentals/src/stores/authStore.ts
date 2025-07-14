@@ -4,8 +4,16 @@ import { supabase } from '../lib/supabase';
 import { trackEvent, trackException, setAuthenticatedUserContext } from '../lib/appInsights';
 
 interface AttendeeData {
+  id: string;
   name: string;
-  bookings: { id: string; paid: boolean }[];
+  checked_in?: boolean;
+  bookings: { 
+    id: string; 
+    paid: boolean;
+    property?: {
+      name: string;
+    };
+  }[];
   // Add other fields as needed
 }
 
@@ -15,7 +23,7 @@ interface AuthState {
   userType: 'admin' | 'attendee' | null;
   attendeeData: AttendeeData | null;
   login: (username: string, password: string) => Promise<boolean>;
-  loginAttendee: (attendeeData: AttendeeData) => void;
+  loginAttendee: (attendeeData: AttendeeData) => Promise<void>;
   updatePaymentStatus: (bookingId: string, paid: boolean) => void;
   logout: () => void;
 }
@@ -82,16 +90,36 @@ export const useAuthStore = create<AuthState>()(
               return false;
             }
 
+            const attendee = attendees[0];
+            
+            // Check if attendee is off-site (has a booking with property name "Off-site")
+            const isOffsite = attendee.bookings?.some((booking: any) => 
+              booking.property?.name === 'Off-site'
+            );
+
+            // If off-site and not already checked in, mark them as checked in
+            if (isOffsite && !attendee.checked_in) {
+              const { error: updateError } = await supabase
+                .from('attendees')
+                .update({ checked_in: true })
+                .eq('id', attendee.id);
+
+              if (!updateError) {
+                attendee.checked_in = true;
+                trackEvent('Auto Check-in', { attendeeName: attendee.name, reason: 'offsite' });
+              }
+            }
+
             // For attendee, sign in with Supabase phone auth if possible, or custom
             // Assuming custom for now, but set session manually (not secure; improve)
             set({
               isAuthenticated: true,
-              username: attendees[0].name,
+              username: attendee.name,
               userType: 'attendee',
-              attendeeData: attendees[0],
+              attendeeData: attendee,
             });
-            setAuthenticatedUserContext(attendees[0].name, 'attendee');
-            trackEvent('Login', { userType: 'attendee', method: 'phone' });
+            setAuthenticatedUserContext(attendee.name, 'attendee');
+            trackEvent('Login', { userType: 'attendee', method: 'phone', isOffsite });
             return true;
           }
 
@@ -112,7 +140,25 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      loginAttendee: (attendeeData: AttendeeData) => {
+      loginAttendee: async (attendeeData: AttendeeData) => {
+        // Check if attendee is off-site
+        const isOffsite = attendeeData.bookings?.some(booking => 
+          booking.property?.name === 'Off-site'
+        );
+
+        // If off-site and not already checked in, mark them as checked in
+        if (isOffsite && !attendeeData.checked_in) {
+          const { error: updateError } = await supabase
+            .from('attendees')
+            .update({ checked_in: true })
+            .eq('id', attendeeData.id);
+
+          if (!updateError) {
+            attendeeData.checked_in = true;
+            trackEvent('Auto Check-in', { attendeeName: attendeeData.name, reason: 'offsite' });
+          }
+        }
+
         set({
           isAuthenticated: true,
           username: attendeeData.name,
