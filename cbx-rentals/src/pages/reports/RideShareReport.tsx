@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Layout } from '../../components/Layout';
 import { UserPlus, Phone, Mail, Calendar, MapPin, Users } from 'lucide-react';
 import { Skeleton } from '../../components/ui/skeleton';
 import { formatPhoneNumber } from '../../lib/utils';
@@ -18,7 +17,7 @@ interface AttendeeWantingRideShare {
       id: string;
       name: string;
       address: string;
-    };
+    } | null;
     check_in: string;
     check_out: string;
   }[];
@@ -47,7 +46,7 @@ export function RideShareReport() {
             id,
             check_in,
             check_out,
-            property:properties (
+            property:properties!inner (
               id,
               name,
               address
@@ -66,11 +65,13 @@ export function RideShareReport() {
         const grouped: Record<string, AttendeeWantingRideShare[]> = {};
         data.forEach(attendee => {
           attendee.bookings.forEach(booking => {
-            const propertyName = booking.property.name;
-            if (!grouped[propertyName]) {
-              grouped[propertyName] = [];
+            if (booking.property) {
+              const propertyName = booking.property.name;
+              if (!grouped[propertyName]) {
+                grouped[propertyName] = [];
+              }
+              grouped[propertyName].push(attendee);
             }
-            grouped[propertyName].push(attendee);
           });
         });
         setGroupedByProperty(grouped);
@@ -84,8 +85,7 @@ export function RideShareReport() {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="p-6">
+      <div className="p-6">
           <h1 className="text-3xl font-bold mb-6">Ride Share Report</h1>
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -99,13 +99,11 @@ export function RideShareReport() {
             ))}
           </div>
         </div>
-      </Layout>
     );
   }
 
   return (
-    <Layout>
-      <div className="p-6">
+    <div className="p-6">
         <div className="mb-6">
           <h1 className="text-3xl font-bold">Ride Share Report</h1>
           <p className="text-gray-600 mt-2">
@@ -155,10 +153,12 @@ export function RideShareReport() {
                             <h4 className="text-sm font-semibold text-gray-700">Booking Details:</h4>
                             {attendee.bookings.map((booking) => (
                               <div key={booking.id} className="text-sm space-y-1 bg-gray-50 p-2 rounded">
-                                <div className="flex items-center gap-2">
-                                  <MapPin className="w-3 h-3 text-gray-400" />
-                                  <span className="font-medium">{booking.property.name}</span>
-                                </div>
+                                {booking.property && (
+                                  <div className="flex items-center gap-2">
+                                    <MapPin className="w-3 h-3 text-gray-400" />
+                                    <span className="font-medium">{booking.property.name}</span>
+                                  </div>
+                                )}
                                 <div className="flex items-center gap-2 text-gray-600">
                                   <Calendar className="w-3 h-3 text-gray-400" />
                                   <span>
@@ -212,6 +212,5 @@ export function RideShareReport() {
           </>
         )}
       </div>
-    </Layout>
   );
 }
