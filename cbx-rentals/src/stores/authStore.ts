@@ -123,7 +123,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'cbx-auth-storage',
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
