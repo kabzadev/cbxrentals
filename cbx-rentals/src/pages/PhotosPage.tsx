@@ -168,9 +168,11 @@ export function PhotosPage() {
       });
     } finally {
       setUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      // Clear both file inputs
+      const cameraInput = document.getElementById('camera-input') as HTMLInputElement;
+      const galleryInput = document.getElementById('gallery-input') as HTMLInputElement;
+      if (cameraInput) cameraInput.value = '';
+      if (galleryInput) galleryInput.value = '';
     }
   };
 
@@ -227,6 +229,7 @@ export function PhotosPage() {
         <h1 className="text-3xl font-bold text-gray-900">Event Photos</h1>
         {tableExists && (
           <div className="flex gap-2">
+            {/* Camera input - for taking photos */}
             <input
               ref={fileInputRef}
               type="file"
@@ -234,9 +237,18 @@ export function PhotosPage() {
               capture="environment"
               onChange={handleFileSelect}
               className="hidden"
+              id="camera-input"
+            />
+            {/* Gallery input - for selecting existing photos */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+              id="gallery-input"
             />
             <Button
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => document.getElementById('camera-input')?.click()}
               disabled={uploading}
               className="bg-blue-600 hover:bg-blue-700"
             >
@@ -244,12 +256,12 @@ export function PhotosPage() {
               Take Photo
             </Button>
             <Button
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => document.getElementById('gallery-input')?.click()}
               disabled={uploading}
               variant="outline"
             >
               <Upload className="w-4 h-4 mr-2" />
-              Upload Photo
+              Choose Photo
             </Button>
           </div>
         )}
@@ -272,13 +284,24 @@ export function PhotosPage() {
           <CardContent className="p-12 text-center">
             <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-4">No photos yet. Be the first to share a moment!</p>
-            <Button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              Upload First Photo
-            </Button>
+            <div className="flex gap-2 justify-center">
+              <Button
+                onClick={() => document.getElementById('camera-input')?.click()}
+                disabled={uploading}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Camera className="w-4 h-4 mr-2" />
+                Take Photo
+              </Button>
+              <Button
+                onClick={() => document.getElementById('gallery-input')?.click()}
+                disabled={uploading}
+                variant="outline"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Choose Photo
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ) : tableExists && (
