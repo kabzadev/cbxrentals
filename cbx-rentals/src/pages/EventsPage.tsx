@@ -247,7 +247,15 @@ export function EventsPage() {
         .delete()
         .eq('id', eventId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Delete error details:', error);
+        
+        // Check if it's an RLS policy error
+        if (error.message?.includes('policy') || error.code === '42501') {
+          throw new Error('Permission denied. Database policies need to be updated to allow deletion.');
+        }
+        throw error;
+      }
 
       toast({
         title: 'Success',
