@@ -241,11 +241,11 @@ export function MapPage() {
                   onCloseClick={() => setSelectedHouse(null)}
                 >
                   <div className="p-2 min-w-[200px]">
-                    <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                    <h3 className="font-bold text-lg text-gray-900 mb-2 flex items-center gap-2">
                       <Home className="h-5 w-5" style={{ color: selectedHouse.color }} />
                       {selectedHouse.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">{selectedHouse.address}</p>
+                    <p className="text-sm text-gray-700 mb-3">{selectedHouse.address}</p>
                     <Button 
                       variant="outline" 
                       size="sm" 
