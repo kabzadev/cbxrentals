@@ -177,6 +177,9 @@ export function EventsPage() {
 
   const handleSaveEvent = async (eventData: any) => {
     try {
+      console.log('handleSaveEvent called with:', eventData);
+      console.log('editingEvent:', editingEvent);
+      
       // Generate map URL from address if we have one
       let mapUrl = eventData.map_url;
       let latitude = eventData.location_latitude;
@@ -207,6 +210,8 @@ export function EventsPage() {
       };
       
       if (editingEvent) {
+        console.log('Updating event:', editingEvent.id, 'with payload:', eventPayload);
+        
         // Update existing event and get the updated data back
         const { data: updatedEvent, error } = await supabase
           .from('events')
@@ -227,13 +232,42 @@ export function EventsPage() {
 
         if (error) throw error;
         
+        console.log('Update response:', updatedEvent);
+        
         // Update the specific event in the state
         if (updatedEvent) {
-          setEvents(prevEvents => 
-            prevEvents.map(event => 
+          setEvents(prevEvents => {
+            const newEvents = prevEvents.map(event => 
               event.id === editingEvent.id ? updatedEvent : event
-            )
-          );
+            );
+            console.log('Updated events state:', newEvents);
+            return newEvents;
+          });
+        } else {
+          console.warn('No updated event data returned from Supabase');
+          
+          // If no data returned, try to fetch the updated event separately
+          const { data: refetchedEvent, error: refetchError } = await supabase
+            .from('events')
+            .select(`
+              *,
+              event_attendees (
+                id,
+                attendee_id,
+                is_interested
+              )
+            `)
+            .eq('id', editingEvent.id)
+            .single();
+            
+          if (!refetchError && refetchedEvent) {
+            console.log('Refetched event:', refetchedEvent);
+            setEvents(prevEvents => 
+              prevEvents.map(event => 
+                event.id === editingEvent.id ? refetchedEvent : event
+              )
+            );
+          }
         }
         
         toast({
