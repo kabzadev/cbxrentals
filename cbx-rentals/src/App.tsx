@@ -10,6 +10,7 @@ import { CheckInWizard } from './pages/CheckInWizard'
 import { MapPage } from './pages/MapPage'
 import { RentalCarsReport } from './pages/reports/RentalCarsReport'
 import { RideShareReport } from './pages/reports/RideShareReport'
+import { UpdateRentalCars } from './pages/admin/UpdateRentalCars'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Layout } from './components/Layout'
 import { Toaster } from './components/ui/toaster'
@@ -33,6 +34,7 @@ function App() {
               <Route path="/map" element={<MapPage />} />
               <Route path="/reports/rental-cars" element={<RentalCarsReport />} />
               <Route path="/reports/ride-share" element={<RideShareReport />} />
+              <Route path="/admin/update-rental-cars" element={<UpdateRentalCars />} />
             </Route>
           </Route>
         </Routes>

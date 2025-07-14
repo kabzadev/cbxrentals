@@ -10,7 +10,7 @@ interface AttendeeWithRentalCar {
   name: string;
   email: string;
   phone: string;
-  rental_car: boolean;
+  has_rental_car: boolean;
   bookings: {
     id: string;
     property: {
@@ -40,7 +40,7 @@ export function RentalCarsReport() {
           name,
           email,
           phone,
-          rental_car,
+          has_rental_car,
           bookings (
             id,
             check_in,
@@ -52,7 +52,7 @@ export function RentalCarsReport() {
             )
           )
         `)
-        .eq('rental_car', true)
+        .eq('has_rental_car', true)
         .order('name');
 
       if (error) throw error;

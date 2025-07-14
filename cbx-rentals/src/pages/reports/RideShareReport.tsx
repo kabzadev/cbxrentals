@@ -10,7 +10,7 @@ interface AttendeeWantingRideShare {
   name: string;
   email: string;
   phone: string;
-  ride_share: boolean;
+  interested_in_carpool: boolean;
   bookings: {
     id: string;
     property: {
@@ -41,7 +41,7 @@ export function RideShareReport() {
           name,
           email,
           phone,
-          ride_share,
+          interested_in_carpool,
           bookings (
             id,
             check_in,
@@ -53,7 +53,7 @@ export function RideShareReport() {
             )
           )
         `)
-        .eq('ride_share', true)
+        .eq('interested_in_carpool', true)
         .order('name');
 
       if (error) throw error;
