@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera } from 'lucide-react';
+import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera, Activity, LogIn } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useState } from 'react';
@@ -110,6 +110,20 @@ export function Navigation() {
                     >
                       <UserPlus className="w-4 h-4 mr-2" />
                       Ride Share Requests
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/reports/login-activity')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Login Activity
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/reports/checkin-activity')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <Activity className="w-4 h-4 mr-2" />
+                      Check-In Activity
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

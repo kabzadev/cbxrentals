@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { supabase } from '../lib/supabase';
 import { trackEvent, trackException, setAuthenticatedUserContext } from '../lib/appInsights';
+import { logActivity } from '../lib/activityLogger';
 
 interface AttendeeData {
   id: string;
@@ -64,6 +65,11 @@ export const useAuthStore = create<AuthState>()(
               method: 'hardcoded',
               username: username,
               userId: username 
+            });
+            // Log admin login activity
+            await logActivity(null, username, 'login', {
+              userType: 'admin',
+              method: 'hardcoded'
             });
             return true;
           }
@@ -158,6 +164,13 @@ export const useAuthStore = create<AuthState>()(
               username: attendee.name,
               userId: attendee.id,
               email: attendee.email 
+            });
+            // Log attendee login activity
+            await logActivity(attendee.id, attendee.name, 'login', {
+              userType: 'attendee',
+              method: 'phone',
+              isOffsite,
+              propertyName: attendee.bookings?.[0]?.property?.name
             });
             return true;
           }

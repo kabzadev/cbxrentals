@@ -10,6 +10,8 @@ import { CheckInWizard } from './pages/CheckInWizard'
 import { MapPage } from './pages/MapPage'
 import { VehicleReport } from './pages/reports/VehicleReport'
 import { RideShareReport } from './pages/reports/RideShareReport'
+import { LoginActivityReport } from './pages/reports/LoginActivityReport'
+import { CheckInActivityReport } from './pages/reports/CheckInActivityReport'
 import { UpdateRentalCars } from './pages/admin/UpdateRentalCars'
 import { PhotosPage } from './pages/PhotosPage'
 import { PhotosManagement } from './pages/admin/PhotosManagement'
@@ -40,6 +42,8 @@ function App() {
               <Route path="/reports/vehicles" element={<VehicleReport />} />
               <Route path="/reports/rental-cars" element={<Navigate to="/reports/vehicles" replace />} />
               <Route path="/reports/ride-share" element={<RideShareReport />} />
+              <Route path="/reports/login-activity" element={<LoginActivityReport />} />
+              <Route path="/reports/checkin-activity" element={<CheckInActivityReport />} />
               <Route path="/admin/update-rental-cars" element={<UpdateRentalCars />} />
               <Route path="/admin/photos" element={<PhotosManagement />} />
             </Route>

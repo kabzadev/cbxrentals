@@ -14,6 +14,7 @@ import { supabase } from '../lib/supabase';
 import { PropertyImages } from '../components/properties/PropertyImages';
 import { useAuthStore } from '../stores/authStore';
 import { trackEvent, trackException, setAuthenticatedUserContext } from '../lib/appInsights';
+import { logActivity } from '../lib/activityLogger';
 
 interface WizardStep {
   id: number;
@@ -314,8 +315,16 @@ export function CheckInWizard() {
         propertyName: booking.property?.name
       });
 
+      // Log check-in completed activity
+      await logActivity(attendee.id, attendee.name, 'check_in_completed', {
+        method: 'payment_flow',
+        propertyName: booking.property?.name,
+        amount: booking.total_amount,
+        hasVehicle: attendee.has_rental_car
+      });
+
       // Authenticate the attendee with updated data
-      loginAttendee(updatedAttendee);
+      await loginAttendee(updatedAttendee);
 
       toast({
         title: 'Payment Confirmed!',
@@ -992,8 +1001,16 @@ export function CheckInWizard() {
                               propertyName: booking.property?.name
                             });
                             
+                            // Log check-in completed activity
+                            await logActivity(attendee.id, attendee.name, 'check_in_completed', {
+                              method: 'without_payment',
+                              propertyName: booking.property?.name,
+                              amount: booking.total_amount,
+                              hasVehicle: attendee.has_rental_car
+                            });
+                            
                             // Authenticate the attendee
-                            loginAttendee(updatedAttendee);
+                            await loginAttendee(updatedAttendee);
                             
                             toast({
                               title: 'Check-In Complete',

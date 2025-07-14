@@ -12,6 +12,7 @@ import { useToast } from '../components/ui/use-toast';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../stores/authStore';
 import { trackEvent, setAuthenticatedUserContext } from '../lib/appInsights';
+import { logActivity } from '../lib/activityLogger';
 
 const checkInSchema = z.object({
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -115,6 +116,12 @@ export function CheckInPage() {
         phoneLastFour: values.phone.slice(-4),
         hasBooking: !!attendee.bookings?.[0],
         propertyName: attendee.bookings?.[0]?.property?.name
+      });
+
+      // Log check-in started activity
+      await logActivity(attendee.id, attendee.name, 'check_in_started', {
+        propertyName: attendee.bookings?.[0]?.property?.name,
+        hasBooking: !!attendee.bookings?.[0]
       });
 
       // Navigate to wizard with attendee data
