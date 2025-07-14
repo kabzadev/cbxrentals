@@ -509,97 +509,98 @@ export function EventsPage() {
                     const interestedCount = event.event_attendees?.filter((ea: any) => ea.is_interested).length || 0;
                     
                     return (
-                      <div key={event.id} className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className={`px-2 py-1 rounded text-xs font-medium ${
-                            event.is_optional 
-                              ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                              : 'bg-green-100 text-green-800 border border-green-300'
-                          }`}>
-                            {event.is_optional ? 'Optional' : 'Official'}
-                          </div>
-                          <h3 className="font-semibold text-gray-900 text-lg flex-1">{event.title}</h3>
-                        </div>
-                        
-                        {event.description && (
-                          <p className="text-gray-600 text-sm mb-3">{event.description}</p>
-                        )}
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-gray-700">
-                              <CalendarIcon className="h-4 w-4 text-gray-500" />
-                              {format(eventDate, 'EEEE, MMMM d, yyyy')}
+                      <div key={event.id} className="bg-gray-50 rounded-lg p-4 sm:p-5 border border-gray-200">
+                        <div className="space-y-3">
+                          {/* Header with badge and title */}
+                          <div className="flex flex-wrap items-start gap-2 sm:gap-3">
+                            <div className={`px-2 py-1 rounded text-xs font-medium ${
+                              event.is_optional 
+                                ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                                : 'bg-green-100 text-green-800 border border-green-300'
+                            }`}>
+                              {event.is_optional ? 'Optional' : 'Official'}
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                              <Clock className="h-4 w-4 text-gray-500" />
-                              {format(eventDate, 'h:mm a')}
-                            </div>
+                            <h3 className="font-semibold text-gray-900 text-base sm:text-lg flex-1">{event.title}</h3>
                           </div>
                           
-                          <div className="space-y-2">
+                          {/* Description */}
+                          {event.description && (
+                            <p className="text-gray-600 text-sm">{event.description}</p>
+                          )}
+                          
+                          {/* Event details */}
+                          <div className="space-y-2 text-sm">
                             <div className="flex items-center gap-2 text-gray-700">
-                              <MapPin className="h-4 w-4 text-gray-500" />
-                              {event.location_name}
+                              <CalendarIcon className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                              <span>{format(eventDate, 'EEEE, MMMM d, yyyy')}</span>
                             </div>
-                            {event.location_address && (
-                              <div className="text-xs text-gray-600 ml-6">
-                                {event.location_address}
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                              <span>{format(eventDate, 'h:mm a')}</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-gray-700">
+                              <MapPin className="h-4 w-4 text-gray-500 flex-shrink-0 mt-0.5" />
+                              <div className="flex-1">
+                                <div>{event.location_name}</div>
+                                {event.location_address && (
+                                  <div className="text-xs text-gray-600 mt-1">
+                                    {event.location_address}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action buttons section */}
+                          <div className="pt-3 space-y-3">
+                            {/* Get Directions Button */}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(getDirectionsUrl(event), '_blank')}
+                              className="w-full bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium"
+                            >
+                              <Navigation className="h-4 w-4 mr-2" />
+                              Get Directions
+                            </Button>
+
+                            {/* Interest tracking for optional events */}
+                            {event.is_optional && userType === 'attendee' && (
+                              <div className="border-t pt-3">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                  {interestedCount > 0 && (
+                                    <div className="text-sm text-gray-600">
+                                      {interestedCount} attendee{interestedCount !== 1 ? 's' : ''} interested
+                                    </div>
+                                  )}
+                                  <Button
+                                    variant={isInterested ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => handleEventInterest(event.id, !isInterested)}
+                                    className={`w-full sm:w-auto ${isInterested 
+                                      ? "bg-blue-500 hover:bg-blue-600 text-white font-medium" 
+                                      : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium"
+                                    }`}
+                                  >
+                                    <Star className={`h-4 w-4 mr-1 ${isInterested ? 'fill-current' : ''}`} />
+                                    {isInterested ? "Attending" : "Not Attending"}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Show interest count for admin */}
+                            {event.is_optional && userType === 'admin' && interestedCount > 0 && (
+                              <div className="text-sm text-gray-600 border-t pt-3">
+                                {interestedCount} attendee{interestedCount !== 1 ? 's' : ''} interested
                               </div>
                             )}
                           </div>
                         </div>
 
-                        {/* Interest tracking for optional events */}
-                        {event.is_optional && userType === 'attendee' && (
-                          <div className="mt-4 pt-4 border-t border-gray-200">
-                            <div className="flex items-center justify-between">
-                              <div className="text-sm text-gray-600">
-                                {interestedCount > 0 && (
-                                  <span>{interestedCount} attendee{interestedCount !== 1 ? 's' : ''} interested</span>
-                                )}
-                              </div>
-                              <Button
-                                variant={isInterested ? "default" : "outline"}
-                                size="sm"
-                                onClick={() => handleEventInterest(event.id, !isInterested)}
-                                className={isInterested 
-                                  ? "bg-blue-500 hover:bg-blue-600 text-white font-medium" 
-                                  : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium"
-                                }
-                              >
-                                <Star className={`h-4 w-4 mr-1 ${isInterested ? 'fill-current' : ''}`} />
-                                {isInterested ? "Attending" : "Not Attending"}
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Show interest count for admin */}
-                        {event.is_optional && userType === 'admin' && interestedCount > 0 && (
-                          <div className="mt-3 text-sm text-gray-600">
-                            {interestedCount} attendee{interestedCount !== 1 ? 's' : ''} interested
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Get Directions Button */}
-                      <div className="ml-4 space-y-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open(getDirectionsUrl(event), '_blank')}
-                          className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium"
-                        >
-                          <Navigation className="h-4 w-4 mr-1" />
-                          Directions
-                        </Button>
-                        
                         {/* Admin edit/delete buttons */}
                         {userType === 'admin' && (
-                          <div className="flex flex-col gap-2">
+                          <div className="mt-3 pt-3 border-t flex flex-wrap gap-2">
                             <Button
                               variant="outline"
                               size="sm"
@@ -607,7 +608,7 @@ export function EventsPage() {
                                 setEditingEvent(event);
                                 setShowEventForm(true);
                               }}
-                              className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium"
+                              className="flex-1 sm:flex-initial bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium"
                             >
                               <Edit2 className="h-4 w-4 mr-1" />
                               Edit
@@ -616,7 +617,7 @@ export function EventsPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleDeleteEvent(event.id)}
-                              className="bg-white border-red-300 text-red-700 hover:bg-red-50 hover:text-red-900 hover:border-red-400"
+                              className="flex-1 sm:flex-initial bg-white border-red-300 text-red-700 hover:bg-red-50 hover:text-red-900 hover:border-red-400"
                             >
                               <Trash2 className="h-4 w-4 mr-1" />
                               Delete
@@ -624,8 +625,6 @@ export function EventsPage() {
                           </div>
                         )}
                       </div>
-                    </div>
-                  </div>
                     );
                   })}
                 </div>
