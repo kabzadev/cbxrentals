@@ -8,7 +8,7 @@ import { PropertyDetailsPage } from './pages/PropertyDetailsPage'
 import { CheckInPage } from './pages/CheckInPage'
 import { CheckInWizard } from './pages/CheckInWizard'
 import { MapPage } from './pages/MapPage'
-import { RentalCarsReport } from './pages/reports/RentalCarsReport'
+import { VehicleReport } from './pages/reports/VehicleReport'
 import { RideShareReport } from './pages/reports/RideShareReport'
 import { UpdateRentalCars } from './pages/admin/UpdateRentalCars'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
@@ -32,7 +32,7 @@ function App() {
               <Route path="/attendees/:id" element={<AttendeeDetailsPage />} />
               <Route path="/properties/:id" element={<PropertyDetailsPage />} />
               <Route path="/map" element={<MapPage />} />
-              <Route path="/reports/rental-cars" element={<RentalCarsReport />} />
+              <Route path="/reports/rental-cars" element={<VehicleReport />} />
               <Route path="/reports/ride-share" element={<RideShareReport />} />
               <Route path="/admin/update-rental-cars" element={<UpdateRentalCars />} />
             </Route>

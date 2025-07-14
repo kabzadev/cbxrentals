@@ -94,7 +94,7 @@ export function Navigation() {
                       className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
                     >
                       <Car className="w-4 h-4 mr-2" />
-                      Rental Cars
+                      Vehicles
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => navigate('/reports/ride-share')}
@@ -188,7 +188,7 @@ export function Navigation() {
                 >
                   <div className="flex items-center">
                     <Car className="w-4 h-4 mr-2" />
-                    Rental Cars
+                    Vehicles
                   </div>
                 </Link>
                 <Link

@@ -236,7 +236,7 @@ export function DashboardPage() {
                     </div>
                     <div className="space-y-2 text-sm">
                       {attendeeData.has_rental_car && (
-                        <p className="text-gray-300">✓ Has rental car</p>
+                        <p className="text-gray-300">✓ Has vehicle</p>
                       )}
                       {attendeeData.interested_in_carpool && (
                         <p className="text-gray-300">✓ Interested in ride sharing</p>

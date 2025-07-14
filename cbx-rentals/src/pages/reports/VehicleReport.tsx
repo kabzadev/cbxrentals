@@ -5,7 +5,7 @@ import { Car, Phone, Mail, Calendar, MapPin } from 'lucide-react';
 import { Skeleton } from '../../components/ui/skeleton';
 import { formatPhoneNumber } from '../../lib/utils';
 
-interface AttendeeWithRentalCar {
+interface AttendeeWithVehicle {
   id: string;
   name: string;
   email: string;
@@ -23,8 +23,8 @@ interface AttendeeWithRentalCar {
   }[];
 }
 
-export function RentalCarsReport() {
-  const [attendees, setAttendees] = useState<AttendeeWithRentalCar[]>([]);
+export function VehicleReport() {
+  const [attendees, setAttendees] = useState<AttendeeWithVehicle[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export function RentalCarsReport() {
       if (error) throw error;
       setAttendees(data || []);
     } catch (error) {
-      console.error('Error loading attendees with rental cars:', error);
+      console.error('Error loading attendees with vehicles:', error);
     } finally {
       setLoading(false);
     }
@@ -67,7 +67,7 @@ export function RentalCarsReport() {
   if (loading) {
     return (
       <div className="p-6">
-        <h1 className="text-3xl font-bold mb-6">Rental Cars Report</h1>
+        <h1 className="text-3xl font-bold mb-6">Vehicle Report</h1>
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
             <Card key={i}>
@@ -86,16 +86,16 @@ export function RentalCarsReport() {
   return (
     <div className="p-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold">Rental Cars Report</h1>
+          <h1 className="text-3xl font-bold">Vehicle Report</h1>
           <p className="text-gray-600 mt-2">
-            Total attendees with rental cars: {attendees.length}
+            Total attendees with vehicles: {attendees.length}
           </p>
         </div>
 
         {attendees.length === 0 ? (
           <Card>
             <CardContent className="p-6 text-center text-gray-500">
-              No attendees with rental cars found.
+              No attendees with vehicles found.
             </CardContent>
           </Card>
         ) : (
