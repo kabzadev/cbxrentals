@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { supabase } from '../lib/supabase';
+import { trackEvent, trackException, setAuthenticatedUserContext } from '../lib/appInsights';
 
 interface AttendeeData {
   name: string;
@@ -49,6 +50,8 @@ export const useAuthStore = create<AuthState>()(
               userType: 'admin',
               attendeeData: null,
             });
+            setAuthenticatedUserContext(username, 'admin');
+            trackEvent('Login', { userType: 'admin', method: 'hardcoded' });
             return true;
           }
 
@@ -75,6 +78,7 @@ export const useAuthStore = create<AuthState>()(
               .eq('phone', formattedPhone);
 
             if (attendeeError || !attendees?.length) {
+              trackEvent('Login Failed', { userType: 'attendee', reason: 'not_found' });
               return false;
             }
 
@@ -86,6 +90,8 @@ export const useAuthStore = create<AuthState>()(
               userType: 'attendee',
               attendeeData: attendees[0],
             });
+            setAuthenticatedUserContext(attendees[0].name, 'attendee');
+            trackEvent('Login', { userType: 'attendee', method: 'phone' });
             return true;
           }
 
@@ -101,6 +107,7 @@ export const useAuthStore = create<AuthState>()(
           return true;
         } catch (error) {
           console.error('Login error:', error);
+          trackException(error as Error, { context: 'login' });
           return false;
         }
       },
