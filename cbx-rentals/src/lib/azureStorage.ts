@@ -16,13 +16,7 @@ export const uploadPhotoToAzure = async (
   
   try {
     // Check if storage URL is configured
-    console.log('Azure Storage URL value:', STORAGE_URL);
-    console.log('Type of STORAGE_URL:', typeof STORAGE_URL);
-    console.log('STORAGE_URL length:', STORAGE_URL?.length);
-    
     if (!STORAGE_URL || STORAGE_URL === 'undefined' || STORAGE_URL.length === 0) {
-      console.log('Azure Storage URL not found. Env vars:', Object.keys(import.meta.env));
-      console.log('Raw env value:', import.meta.env.VITE_AZURE_STORAGE_SAS_URL);
       throw new Error('Azure Storage is not configured. Please check your environment variables.');
     }
     
