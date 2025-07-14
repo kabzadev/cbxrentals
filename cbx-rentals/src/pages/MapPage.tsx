@@ -79,6 +79,17 @@ const houses: House[] = [
     maxOccupancy: 0,
     color: '#27AE60',
     isSpecialLocation: true
+  },
+  {
+    id: 7,
+    name: 'Beach Break Cafe',
+    address: '1802 S Coast Hwy, Oceanside, CA 92054',
+    coordinates: { lat: 33.1750806, lng: -117.3618917 },
+    bedrooms: 0,
+    bathrooms: 0,
+    maxOccupancy: 0,
+    color: '#F39C12',
+    isSpecialLocation: true
   }
 ];
 
