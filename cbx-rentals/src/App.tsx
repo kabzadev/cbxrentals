@@ -31,7 +31,7 @@ function App() {
     if (userType === 'attendee') {
       refreshAttendeeData();
     }
-  }, [userType, refreshAttendeeData]);
+  }, [userType]); // Remove refreshAttendeeData from dependencies to avoid hooks error
   return (
     <>
       <Router>
