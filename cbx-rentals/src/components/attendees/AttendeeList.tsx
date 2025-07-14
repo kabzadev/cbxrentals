@@ -346,7 +346,7 @@ export function AttendeeList() {
                   </TableHead>
                   <TableHead>Phone</TableHead>
                   <TableHead>House</TableHead>
-                  <TableHead>Rental Car</TableHead>
+                  <TableHead>Vehicle</TableHead>
                   <TableHead 
                     className="cursor-pointer hover:bg-muted/50"
                     onClick={() => handleSort('checkIn')}
