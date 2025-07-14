@@ -27,7 +27,7 @@ cd /Users/keithkabza/work/CBXRentals/cbx-rentals
 
 ## Login Credentials:
 - **Username**: cbxadmin
-- **Password**: CBX2024$ecure!
+- **Password**: CBX2025$ecure
 
 ## If the server still doesn't work:
 

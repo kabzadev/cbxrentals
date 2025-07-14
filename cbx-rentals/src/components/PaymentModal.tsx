@@ -63,28 +63,28 @@ export function PaymentModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="sticky top-0 bg-background z-10 pb-2">
           <DialogTitle>Make Payment - {formatCurrency(amount)}</DialogTitle>
           <DialogDescription>
             Scan the QR code below with your Venmo app to send payment
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4">
+        <div className="space-y-4 pb-2">
           {/* Venmo QR Code */}
-          <div className="flex justify-center p-4 bg-white rounded-lg">
+          <div className="flex justify-center p-2 sm:p-4 bg-white rounded-lg">
             <img 
               src="/venmo-qr.png" 
               alt="Venmo QR Code" 
-              className="w-64 h-64"
+              className="w-48 h-48 sm:w-64 sm:h-64"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 const fallback = e.currentTarget.nextElementSibling;
                 if (fallback) fallback.classList.remove('hidden');
               }}
             />
-            <div className="w-64 h-64 bg-gray-100 rounded flex flex-col items-center justify-center hidden">
+            <div className="w-48 h-48 sm:w-64 sm:h-64 bg-gray-100 rounded flex flex-col items-center justify-center hidden">
               <QrCode className="w-16 h-16 text-gray-400 mb-2" />
               <p className="text-sm text-gray-600 text-center px-4">
                 Please save the Venmo QR code image as<br/>

@@ -15,7 +15,7 @@ interface AuthState {
 
 // TEMPORARY HARDCODED VALUES FOR TESTING
 const AUTH_USERNAME = 'cbxadmin';
-const AUTH_PASSWORD = 'CBX2024$ecure!';
+const AUTH_PASSWORD = 'CBX2025$ecure';
 
 const formatPhoneNumber = (phone: string) => {
   // Remove all non-numeric characters and return just digits

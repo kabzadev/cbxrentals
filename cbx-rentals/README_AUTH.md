@@ -54,7 +54,7 @@ Updated `App.tsx` with:
 Created `.env.local` with:
 ```
 VITE_AUTH_USERNAME=cbxadmin
-VITE_AUTH_PASSWORD=CBX2024$ecure!
+VITE_AUTH_PASSWORD=CBX2025$ecure
 ```
 
 Also created `.env.example` for documentation.
@@ -72,7 +72,7 @@ Also created `.env.example` for documentation.
 
 4. Login with:
    - Username: `cbxadmin`
-   - Password: `CBX2024$ecure!`
+   - Password: `CBX2025$ecure`
 
 5. After successful login, you'll be redirected to the dashboard
 
