@@ -231,6 +231,17 @@ export function EventsPage() {
     if (!confirm('Are you sure you want to delete this event?')) return;
 
     try {
+      // First delete any event_attendees records for this event
+      const { error: attendeesError } = await supabase
+        .from('event_attendees')
+        .delete()
+        .eq('event_id', eventId);
+
+      if (attendeesError) {
+        console.error('Error deleting event attendees:', attendeesError);
+      }
+
+      // Then delete the event
       const { error } = await supabase
         .from('events')
         .delete()
@@ -243,8 +254,23 @@ export function EventsPage() {
         description: 'Event deleted successfully',
       });
 
-      // Refresh events
-      setEvents(events.filter(e => e.id !== eventId));
+      // Refresh events from database
+      const { data: eventsData } = await supabase
+        .from('events')
+        .select(`
+          *,
+          event_attendees (
+            id,
+            attendee_id,
+            is_interested
+          )
+        `)
+        .order('event_date')
+        .order('event_time');
+
+      if (eventsData) {
+        setEvents(eventsData);
+      }
     } catch (error) {
       console.error('Error deleting event:', error);
       toast({
