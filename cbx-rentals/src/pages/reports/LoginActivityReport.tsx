@@ -30,6 +30,7 @@ export function LoginActivityReport() {
 
   const fetchLoginActivities = async () => {
     setLoading(true);
+    console.log('Fetching login activities...');
     try {
       let query = supabase
         .from('activity_logs')
@@ -52,6 +53,8 @@ export function LoginActivityReport() {
 
       const { data, error } = await query;
 
+      console.log('Login activities query result:', { data, error });
+
       if (error) throw error;
 
       // Apply user type filter
@@ -62,6 +65,7 @@ export function LoginActivityReport() {
         );
       }
 
+      console.log('Filtered activities:', filteredData);
       setActivities(filteredData);
     } catch (error) {
       console.error('Error fetching login activities:', error);
