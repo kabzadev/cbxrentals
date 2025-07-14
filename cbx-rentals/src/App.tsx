@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { EventsPage } from './pages/EventsPage'
@@ -20,8 +21,17 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Layout } from './components/Layout'
 import { Toaster } from './components/ui/toaster'
 import { RedirectOldUrls } from './components/RedirectOldUrls'
+import { useAuthStore } from './stores/authStore'
 
 function App() {
+  const { refreshAttendeeData, userType } = useAuthStore();
+
+  useEffect(() => {
+    // Refresh attendee data on app mount if logged in as attendee
+    if (userType === 'attendee') {
+      refreshAttendeeData();
+    }
+  }, [userType, refreshAttendeeData]);
   return (
     <>
       <Router>

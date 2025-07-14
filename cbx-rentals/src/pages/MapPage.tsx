@@ -163,7 +163,7 @@ export function MapPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <MapPin className="h-6 w-6" />
-              CBX Rentals House Map
+              CBX Experience House Map
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -213,7 +213,7 @@ export function MapPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MapPin className="h-6 w-6" />
-            CBX Rentals House Map
+            CBX Experience House Map
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">

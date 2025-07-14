@@ -25,6 +25,7 @@ interface AuthState {
   attendeeData: AttendeeData | null;
   login: (username: string, password: string) => Promise<boolean>;
   loginAttendee: (attendeeData: AttendeeData) => Promise<void>;
+  refreshAttendeeData: () => Promise<void>;
   updatePaymentStatus: (bookingId: string, paid: boolean) => void;
   logout: () => void;
 }
@@ -228,6 +229,37 @@ export const useAuthStore = create<AuthState>()(
           userType: 'attendee',
           attendeeData: attendeeData
         });
+      },
+
+      refreshAttendeeData: async () => {
+        const state = useAuthStore.getState();
+        if (state.userType !== 'attendee' || !state.attendeeData?.id) {
+          return;
+        }
+
+        try {
+          const { data: refreshedAttendee, error } = await supabase
+            .from('attendees')
+            .select(`
+              *,
+              bookings (
+                *,
+                property:properties (*)
+              )
+            `)
+            .eq('id', state.attendeeData.id)
+            .single();
+
+          if (error) throw error;
+
+          if (refreshedAttendee) {
+            set({
+              attendeeData: refreshedAttendee
+            });
+          }
+        } catch (error) {
+          console.error('Error refreshing attendee data:', error);
+        }
       },
 
       updatePaymentStatus: (bookingId: string, paid: boolean) => {

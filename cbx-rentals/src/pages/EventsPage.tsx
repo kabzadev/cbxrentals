@@ -207,28 +207,64 @@ export function EventsPage() {
       };
       
       if (editingEvent) {
-        // Update existing event
-        const { error } = await supabase
+        // Update existing event and get the updated data back
+        const { data: updatedEvent, error } = await supabase
           .from('events')
           .update({
             ...eventPayload,
             updated_at: new Date().toISOString()
           })
-          .eq('id', editingEvent.id);
+          .eq('id', editingEvent.id)
+          .select(`
+            *,
+            event_attendees (
+              id,
+              attendee_id,
+              is_interested
+            )
+          `)
+          .single();
 
         if (error) throw error;
+        
+        // Update the specific event in the state
+        if (updatedEvent) {
+          setEvents(prevEvents => 
+            prevEvents.map(event => 
+              event.id === editingEvent.id ? updatedEvent : event
+            )
+          );
+        }
         
         toast({
           title: 'Success',
           description: 'Event updated successfully',
         });
       } else {
-        // Create new event
-        const { error } = await supabase
+        // Create new event and get the created data back
+        const { data: newEvent, error } = await supabase
           .from('events')
-          .insert(eventPayload);
+          .insert(eventPayload)
+          .select(`
+            *,
+            event_attendees (
+              id,
+              attendee_id,
+              is_interested
+            )
+          `)
+          .single();
 
         if (error) throw error;
+        
+        // Add the new event to the state
+        if (newEvent) {
+          setEvents(prevEvents => [...prevEvents, newEvent].sort((a, b) => {
+            const dateCompare = a.event_date.localeCompare(b.event_date);
+            if (dateCompare !== 0) return dateCompare;
+            return a.event_time.localeCompare(b.event_time);
+          }));
+        }
         
         toast({
           title: 'Success',
@@ -236,32 +272,27 @@ export function EventsPage() {
         });
       }
 
-      // Refresh events
-      const { data: eventsData } = await supabase
-        .from('events')
-        .select(`
-          *,
-          event_attendees (
-            id,
-            attendee_id,
-            is_interested
-          )
-        `)
-        .order('event_date')
-        .order('event_time');
-
-      if (eventsData) {
-        setEvents(eventsData);
-      }
-
       setEditingEvent(null);
       setShowEventForm(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving event:', error);
+      
+      let errorMessage = 'Failed to save event';
+      if (error?.message) {
+        errorMessage += `: ${error.message}`;
+      }
+      
       toast({
         title: 'Error',
-        description: 'Failed to save event',
+        description: errorMessage,
         variant: 'destructive',
+      });
+      
+      // Track the error for debugging
+      trackException(error as Error, {
+        context: 'save_event',
+        action: editingEvent ? 'update' : 'create',
+        eventData: eventPayload
       });
     }
   };

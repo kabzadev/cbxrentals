@@ -277,7 +277,7 @@ export function DashboardPage() {
           <p className="text-gray-600">
             {userType === 'attendee' 
               ? 'CBX Experience - Your event information' 
-              : 'Welcome to CBX Rentals management system'
+              : 'Welcome to CBX Experience management system'
             }
           </p>
         </div>

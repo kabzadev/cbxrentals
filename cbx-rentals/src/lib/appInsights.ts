@@ -20,7 +20,7 @@ const appInsights = new ApplicationInsights({
     disableAjaxTracking: false,
     autoTrackPageVisitTime: true,
     enableUnhandledPromiseRejectionTracking: true,
-    name: 'CBX Rentals',
+    name: 'CBX Experience',
     maxBatchInterval: 5000,
     disableExceptionTracking: false,
     samplingPercentage: 100

@@ -84,7 +84,7 @@ export function LoginForm() {
             <LockIcon className="h-6 w-6 text-white" />
           </div>
         </div>
-        <CardTitle className="text-2xl text-center text-white">CBX Rentals Admin</CardTitle>
+        <CardTitle className="text-2xl text-center text-white">CBX Experience Admin</CardTitle>
         <CardDescription className="text-center text-gray-400">
           Enter your credentials to access the dashboard
         </CardDescription>

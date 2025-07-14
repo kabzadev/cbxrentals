@@ -33,7 +33,7 @@ export function CheckInWizard() {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { loginAttendee, logout } = useAuthStore();
+  const { loginAttendee, logout, attendeeData, isAuthenticated } = useAuthStore();
   const [currentStep, setCurrentStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isEditingDates, setIsEditingDates] = useState(false);
@@ -43,11 +43,84 @@ export function CheckInWizard() {
   const [arrivalTime, setArrivalTime] = useState('');
   const [hasRentalCar, setHasRentalCar] = useState<boolean | null>(null);
   const [interestedInCarpool, setInterestedInCarpool] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Get attendee and booking data from navigation state
   const { attendee, booking } = location.state || {};
 
+  useEffect(() => {
+    // Check if user is already checked in
+    const checkAuthStatus = async () => {
+      // If user is authenticated and already checked in, redirect to dashboard
+      if (isAuthenticated && attendeeData?.checked_in) {
+        navigate('/dashboard');
+        return;
+      }
+      
+      // If no navigation state and user is authenticated, fetch their data
+      if (!attendee && isAuthenticated && attendeeData) {
+        try {
+          // Check if they have bookings and if they're checked in
+          const { data: attendeeWithBookings, error } = await supabase
+            .from('attendees')
+            .select(`
+              *,
+              bookings (
+                *,
+                property:properties (*)
+              )
+            `)
+            .eq('id', attendeeData.id)
+            .single();
+
+          if (error) throw error;
+
+          if (attendeeWithBookings?.checked_in) {
+            // User is already checked in, redirect to dashboard
+            navigate('/dashboard');
+            return;
+          }
+
+          // If they have a booking but aren't checked in, redirect to check-in page
+          if (attendeeWithBookings?.bookings?.length > 0) {
+            navigate('/check-in');
+            return;
+          }
+        } catch (error) {
+          console.error('Error checking attendee status:', error);
+        }
+      }
+      
+      setIsLoading(false);
+    };
+
+    checkAuthStatus();
+  }, [isAuthenticated, attendeeData, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e50914] mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // For off-site attendees or those without bookings who are already checked in,
+  // redirect to dashboard
+  if (!attendee && isAuthenticated && attendeeData?.checked_in) {
+    navigate('/dashboard');
+    return null;
+  }
+
   if (!attendee || !booking) {
+    // If they're an off-site attendee (no booking), redirect to dashboard if checked in
+    if (isAuthenticated && attendeeData?.checked_in) {
+      navigate('/dashboard');
+      return null;
+    }
     navigate('/check-in');
     return null;
   }
