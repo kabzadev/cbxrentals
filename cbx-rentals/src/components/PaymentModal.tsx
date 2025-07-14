@@ -63,28 +63,30 @@ export function PaymentModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto mx-4">
-        <DialogHeader className="sticky top-0 bg-background z-10 pb-2">
-          <DialogTitle className="text-base sm:text-lg">Make Payment - {formatCurrency(amount)}</DialogTitle>
-          <DialogDescription className="text-sm">
-            Scan the QR code below with your Venmo app to send payment
-          </DialogDescription>
-        </DialogHeader>
-        
-        <div className="space-y-3 pb-2">
+      <DialogContent className="w-full h-full sm:max-w-md sm:h-auto sm:max-h-[90vh] fixed inset-0 sm:inset-auto sm:left-[50%] sm:top-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] p-0 sm:p-6 rounded-none sm:rounded-lg bg-white">
+        <div className="h-full flex flex-col safe-area-inset">
+          <DialogHeader className="p-4 pb-2 pt-safe sm:p-0 sm:pb-2 border-b sm:border-0 bg-white">
+            <DialogTitle className="text-base sm:text-lg pr-8">Make Payment - {formatCurrency(amount)}</DialogTitle>
+            <DialogDescription className="text-sm">
+              Scan the QR code below with your Venmo app to send payment
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="flex-1 overflow-y-auto p-4 sm:p-0">
+            <div className="space-y-3 pb-2">
           {/* Venmo QR Code */}
-          <div className="flex justify-center p-2 bg-white rounded-lg">
+          <div className="flex justify-center p-3 bg-white rounded-lg">
             <img 
               src="/venmo-qr.png" 
               alt="Venmo QR Code" 
-              className="w-36 h-36 sm:w-48 sm:h-48"
+              className="w-40 h-40 sm:w-48 sm:h-48"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 const fallback = e.currentTarget.nextElementSibling;
                 if (fallback) fallback.classList.remove('hidden');
               }}
             />
-            <div className="w-36 h-36 sm:w-48 sm:h-48 bg-gray-100 rounded flex flex-col items-center justify-center hidden">
+            <div className="w-40 h-40 sm:w-48 sm:h-48 bg-gray-100 rounded flex flex-col items-center justify-center hidden">
               <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-2" />
               <p className="text-xs sm:text-sm text-gray-600 text-center px-2">
                 Please save the Venmo QR code image as<br/>
@@ -148,6 +150,8 @@ export function PaymentModal({
               <Check className="h-4 w-4 mr-2" />
               {isProcessing ? 'Recording Payment...' : 'I\'ve Sent the Payment'}
             </Button>
+          </div>
+            </div>
           </div>
         </div>
       </DialogContent>
