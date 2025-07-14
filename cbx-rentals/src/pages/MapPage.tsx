@@ -30,7 +30,7 @@ const houses = [
     id: 3,
     name: 'House 3',
     address: '828 S Pacific St, Oceanside, CA',
-    coordinates: { lat: 33.1824, lng: -117.3767 },
+    coordinates: { lat: 33.1851918, lng: -117.3761301 },
     bedrooms: 4,
     bathrooms: 5,
     maxOccupancy: 8,
