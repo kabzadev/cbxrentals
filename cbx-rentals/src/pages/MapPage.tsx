@@ -9,41 +9,41 @@ const houses = [
   {
     id: 1,
     name: 'House 1',
-    address: '3116 Waterway Pl, Carlsbad, CA 92009',
-    coordinates: { lat: 33.0836, lng: -117.3108 },
-    bedrooms: 4,
-    bathrooms: 3,
+    address: '1724 S Pacific St, Oceanside, CA',
+    coordinates: { lat: 33.1894, lng: -117.3814 },
+    bedrooms: 6,
+    bathrooms: 5,
     maxOccupancy: 8,
     color: '#FF6B6B'
   },
   {
     id: 2,
     name: 'House 2',
-    address: '1427 Summit Ave, Carlsbad, CA 92008',
-    coordinates: { lat: 33.1580, lng: -117.3505 },
-    bedrooms: 3,
-    bathrooms: 2,
-    maxOccupancy: 6,
+    address: '1722 S Pacific St, Oceanside, CA',
+    coordinates: { lat: 33.1894, lng: -117.3814 },
+    bedrooms: 6,
+    bathrooms: 5,
+    maxOccupancy: 8,
     color: '#4ECDC4'
   },
   {
     id: 3,
     name: 'House 3',
-    address: '215 Walnut Ave, Carlsbad, CA 92008',
-    coordinates: { lat: 33.1609, lng: -117.3476 },
+    address: '828 S Pacific St, Oceanside, CA',
+    coordinates: { lat: 33.1984, lng: -117.3814 },
     bedrooms: 4,
-    bathrooms: 3,
+    bathrooms: 5,
     maxOccupancy: 8,
     color: '#FFE66D'
   },
   {
     id: 4,
     name: 'House 4',
-    address: '205 Elm Ave, Carlsbad, CA 92008',
-    coordinates: { lat: 33.1607, lng: -117.3481 },
+    address: '923 S Pacific St, Oceanside, CA',
+    coordinates: { lat: 33.1974, lng: -117.3814 },
     bedrooms: 3,
     bathrooms: 2,
-    maxOccupancy: 6,
+    maxOccupancy: 4,
     color: '#95E1D3'
   }
 ];
@@ -53,10 +53,10 @@ const mapContainerStyle = {
   height: '600px'
 };
 
-// Center the map around Carlsbad
+// Center the map around Oceanside
 const center = {
-  lat: 33.1215,
-  lng: -117.3287
+  lat: 33.1939,
+  lng: -117.3814
 };
 
 const options = {
