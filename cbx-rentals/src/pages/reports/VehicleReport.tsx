@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Car, Phone, Mail, Calendar, MapPin } from 'lucide-react';
+import { Car, Phone, Calendar, MapPin } from 'lucide-react';
 import { Skeleton } from '../../components/ui/skeleton';
 import { formatPhoneNumber } from '../../lib/utils';
 
@@ -93,33 +93,27 @@ export function VehicleReport() {
         </div>
 
         {attendees.length === 0 ? (
-          <Card>
-            <CardContent className="p-6 text-center text-gray-500">
+          <Card className="bg-white border-gray-200">
+            <CardContent className="p-6 text-center text-gray-600">
               No attendees with vehicles found.
             </CardContent>
           </Card>
         ) : (
           <div className="space-y-4">
             {attendees.map((attendee) => (
-              <Card key={attendee.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2">
+              <Card key={attendee.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-3 bg-gray-50">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <Car className="w-5 h-5 text-blue-600" />
                     {attendee.name}
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="bg-white">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <Mail className="w-4 h-4 text-gray-400" />
-                        <a href={`mailto:${attendee.email}`} className="text-blue-600 hover:underline">
-                          {attendee.email}
-                        </a>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Phone className="w-4 h-4 text-gray-400" />
-                        <a href={`tel:${attendee.phone}`} className="text-blue-600 hover:underline">
+                        <Phone className="w-4 h-4 text-gray-500" />
+                        <a href={`tel:${attendee.phone}`} className="text-blue-700 hover:text-blue-900 hover:underline font-medium">
                           {formatPhoneNumber(attendee.phone)}
                         </a>
                       </div>
@@ -127,17 +121,17 @@ export function VehicleReport() {
                     
                     {attendee.bookings.length > 0 && (
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-gray-700">Booking Details:</h4>
+                        <h4 className="text-sm font-semibold text-gray-800">Booking Details:</h4>
                         {attendee.bookings.map((booking) => (
-                          <div key={booking.id} className="text-sm space-y-1 bg-gray-50 p-2 rounded">
+                          <div key={booking.id} className="text-sm space-y-1 bg-blue-50 border border-blue-100 p-3 rounded">
                             {booking.property && (
                               <div className="flex items-center gap-2">
-                                <MapPin className="w-3 h-3 text-gray-400" />
-                                <span className="font-medium">{booking.property.name}</span>
+                                <MapPin className="w-3 h-3 text-gray-600" />
+                                <span className="font-medium text-gray-900">{booking.property.name}</span>
                               </div>
                             )}
-                            <div className="flex items-center gap-2 text-gray-600">
-                              <Calendar className="w-3 h-3 text-gray-400" />
+                            <div className="flex items-center gap-2 text-gray-700">
+                              <Calendar className="w-3 h-3 text-gray-600" />
                               <span>
                                 {new Date(booking.arrival_date).toLocaleDateString()} - {new Date(booking.exit_date).toLocaleDateString()}
                               </span>

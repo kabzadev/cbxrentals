@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { UserPlus, Phone, Mail, Calendar, MapPin, Users } from 'lucide-react';
+import { UserPlus, Phone, Calendar, MapPin, Users } from 'lucide-react';
 import { Skeleton } from '../../components/ui/skeleton';
 import { formatPhoneNumber } from '../../lib/utils';
 
@@ -86,7 +86,7 @@ export function RideShareReport() {
   if (loading) {
     return (
       <div className="p-6">
-          <h1 className="text-3xl font-bold mb-6">Ride Share Report</h1>
+          <h1 className="text-3xl font-bold mb-6 text-gray-900">Ride Share Report</h1>
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
               <Card key={i}>
@@ -105,7 +105,7 @@ export function RideShareReport() {
   return (
     <div className="p-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold">Ride Share Report</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Ride Share Report</h1>
           <p className="text-gray-600 mt-2">
             Total attendees requesting ride share: {attendees.length}
           </p>
@@ -121,7 +121,7 @@ export function RideShareReport() {
           <>
             {/* Individual List */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">All Attendees Requesting Ride Share</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">All Attendees Requesting Ride Share</h2>
               <div className="space-y-4">
                 {attendees.map((attendee) => (
                   <Card key={attendee.id} className="hover:shadow-lg transition-shadow">
@@ -135,14 +135,8 @@ export function RideShareReport() {
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <div className="flex items-center gap-2 text-sm">
-                            <Mail className="w-4 h-4 text-gray-400" />
-                            <a href={`mailto:${attendee.email}`} className="text-blue-600 hover:underline">
-                              {attendee.email}
-                            </a>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm">
-                            <Phone className="w-4 h-4 text-gray-400" />
-                            <a href={`tel:${attendee.phone}`} className="text-blue-600 hover:underline">
+                            <Phone className="w-4 h-4 text-gray-500" />
+                            <a href={`tel:${attendee.phone}`} className="text-blue-700 hover:text-blue-900 hover:underline font-medium">
                               {formatPhoneNumber(attendee.phone)}
                             </a>
                           </div>
@@ -178,7 +172,7 @@ export function RideShareReport() {
 
             {/* Grouped by Property */}
             <div>
-              <h2 className="text-xl font-semibold mb-4">Grouped by Property (for ride sharing coordination)</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Grouped by Property (for ride sharing coordination)</h2>
               <div className="space-y-6">
                 {Object.entries(groupedByProperty).map(([propertyName, propertyAttendees]) => (
                   <Card key={propertyName} className="border-2 border-green-200">
@@ -192,12 +186,9 @@ export function RideShareReport() {
                       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {propertyAttendees.map((attendee) => (
                           <div key={attendee.id} className="bg-gray-50 p-3 rounded-lg">
-                            <h4 className="font-medium text-sm mb-1">{attendee.name}</h4>
+                            <h4 className="font-medium text-sm mb-1 text-gray-900">{attendee.name}</h4>
                             <div className="space-y-1">
-                              <a href={`mailto:${attendee.email}`} className="text-xs text-blue-600 hover:underline block">
-                                {attendee.email}
-                              </a>
-                              <a href={`tel:${attendee.phone}`} className="text-xs text-blue-600 hover:underline block">
+                              <a href={`tel:${attendee.phone}`} className="text-xs text-blue-700 hover:text-blue-900 hover:underline block font-medium">
                                 {formatPhoneNumber(attendee.phone)}
                               </a>
                             </div>
