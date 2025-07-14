@@ -68,6 +68,17 @@ const houses: House[] = [
     maxOccupancy: 0,
     color: '#9B59B6',
     isSpecialLocation: true
+  },
+  {
+    id: 6,
+    name: 'Torrey Pines State Park',
+    address: '12600 N Torrey Pines Rd, La Jolla, CA 92037',
+    coordinates: { lat: 32.9262, lng: -117.2564 },
+    bedrooms: 0,
+    bathrooms: 0,
+    maxOccupancy: 0,
+    color: '#27AE60',
+    isSpecialLocation: true
   }
 ];
 
