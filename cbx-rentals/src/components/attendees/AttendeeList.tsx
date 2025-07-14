@@ -271,6 +271,14 @@ export function AttendeeList() {
               </Button>
             </div>
 
+            {/* Legend for non-admin users */}
+            {!isAdmin && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-4 h-4 border-2 border-green-500 rounded"></div>
+                <span>Confirmed dates</span>
+              </div>
+            )}
+
             {/* Filter Options */}
             {showFilters && (
               <div className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-3">
@@ -648,7 +656,7 @@ export function AttendeeList() {
                     {groupedData.sameHouseAttendees.map(attendee => {
                       const bookingInfo = getAttendeeBookingInfo(attendee);
                       return (
-                        <Card key={attendee.id} className="bg-blue-50 border-blue-200">
+                        <Card key={attendee.id} className={`bg-blue-50 ${(attendee as any).checked_in ? 'border-green-500 border-2' : 'border-blue-200'}`}>
                           <CardContent className="p-4">
                             <div className="flex justify-between items-start mb-2">
                               <h4 className="font-semibold text-gray-900">{attendee.name}</h4>
@@ -701,7 +709,7 @@ export function AttendeeList() {
                     {groupedData.otherHouseAttendees.map(attendee => {
                       const bookingInfo = getAttendeeBookingInfo(attendee);
                   return (
-                    <Card key={attendee.id} className="bg-white">
+                    <Card key={attendee.id} className={`bg-white ${(attendee as any).checked_in ? 'border-green-500 border-2' : ''}`}>
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="font-semibold text-gray-900">{attendee.name}</h4>
@@ -749,7 +757,7 @@ export function AttendeeList() {
                 {!groupedData && sortedAttendees.map((attendee) => {
                   const bookingInfo = getAttendeeBookingInfo(attendee);
                   return (
-                    <Card key={attendee.id} className="bg-white">
+                    <Card key={attendee.id} className={`bg-white ${(attendee as any).checked_in ? 'border-green-500 border-2' : ''}`}>
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="font-semibold text-gray-900">{attendee.name}</h4>
