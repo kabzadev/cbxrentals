@@ -227,7 +227,7 @@ export function EventsPage() {
         }
 
         // Then fetch the updated event separately
-        const { data: updatedEvent, error: fetchError } = await supabase
+        const { data: updatedEvents, error: fetchError } = await supabase
           .from('events')
           .select(`
             *,
@@ -237,13 +237,14 @@ export function EventsPage() {
               is_interested
             )
           `)
-          .eq('id', editingEvent.id)
-          .single();
+          .eq('id', editingEvent.id);
 
         if (fetchError) {
           console.error('Fetch error:', fetchError);
           // Don't throw here, the update might have succeeded even if fetch failed
         }
+        
+        const updatedEvent = updatedEvents?.[0];
         
         console.log('Update response:', updatedEvent);
         
