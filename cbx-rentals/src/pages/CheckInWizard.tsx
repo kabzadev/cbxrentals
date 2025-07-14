@@ -470,11 +470,34 @@ export function CheckInWizard() {
                     <div className="flex gap-3 mt-2">
                       <div className="flex-1">
                         <select
-                          value={arrivalTime.split(':')[0] || ''}
+                          value={(() => {
+                            if (!arrivalTime) return '';
+                            const hour24 = parseInt(arrivalTime.split(':')[0]);
+                            if (hour24 === 0) return '12';
+                            if (hour24 > 12) return (hour24 - 12).toString().padStart(2, '0');
+                            return hour24.toString().padStart(2, '0');
+                          })()}
                           onChange={(e) => {
-                            const hour = e.target.value;
+                            const hour12 = e.target.value;
                             const minute = arrivalTime.split(':')[1] || '00';
-                            setArrivalTime(hour ? `${hour}:${minute}` : '');
+                            
+                            if (!hour12) {
+                              setArrivalTime('');
+                              return;
+                            }
+                            
+                            // Keep the current AM/PM when changing hour
+                            const currentHour24 = arrivalTime ? parseInt(arrivalTime.split(':')[0]) : 12;
+                            const isPM = currentHour24 >= 12;
+                            
+                            let hour24 = parseInt(hour12);
+                            if (isPM && hour24 !== 12) {
+                              hour24 += 12;
+                            } else if (!isPM && hour24 === 12) {
+                              hour24 = 0;
+                            }
+                            
+                            setArrivalTime(`${hour24.toString().padStart(2, '0')}:${minute}`);
                           }}
                           className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-gray-900 bg-white focus:border-[#e50914] focus:outline-none"
                         >
@@ -505,19 +528,34 @@ export function CheckInWizard() {
                       </div>
                       <div className="flex-1">
                         <select
-                          value={arrivalTime.includes('1') && parseInt(arrivalTime.split(':')[0]) > 12 ? 'PM' : arrivalTime && parseInt(arrivalTime.split(':')[0]) <= 12 ? 'AM' : ''}
+                          value={(() => {
+                            if (!arrivalTime) return '';
+                            const hour24 = parseInt(arrivalTime.split(':')[0]);
+                            return hour24 >= 12 ? 'PM' : 'AM';
+                          })()}
                           onChange={(e) => {
-                            const hour = arrivalTime.split(':')[0];
-                            const minute = arrivalTime.split(':')[1] || '00';
-                            if (hour && e.target.value) {
-                              let hour24 = parseInt(hour);
-                              if (e.target.value === 'PM' && hour24 !== 12) {
-                                hour24 += 12;
-                              } else if (e.target.value === 'AM' && hour24 === 12) {
-                                hour24 = 0;
-                              }
-                              setArrivalTime(`${hour24.toString().padStart(2, '0')}:${minute}`);
+                            if (!arrivalTime || !e.target.value) return;
+                            
+                            const [hourStr, minute] = arrivalTime.split(':');
+                            const hour24 = parseInt(hourStr);
+                            
+                            let hour12;
+                            if (hour24 === 0) {
+                              hour12 = 12;
+                            } else if (hour24 > 12) {
+                              hour12 = hour24 - 12;
+                            } else {
+                              hour12 = hour24;
                             }
+                            
+                            let newHour24;
+                            if (e.target.value === 'PM') {
+                              newHour24 = hour12 === 12 ? 12 : hour12 + 12;
+                            } else { // AM
+                              newHour24 = hour12 === 12 ? 0 : hour12;
+                            }
+                            
+                            setArrivalTime(`${newHour24.toString().padStart(2, '0')}:${minute || '00'}`);
                           }}
                           className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-gray-900 bg-white focus:border-[#e50914] focus:outline-none"
                         >
