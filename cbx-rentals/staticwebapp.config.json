@@ -1,6 +1,7 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "filter": "ALL"
   },
   "responseOverrides": {
     "404": {
@@ -14,5 +15,8 @@
       "serve": "/index.html",
       "statusCode": 200
     }
-  ]
+  ],
+  "platform": {
+    "apiRuntime": "node:18"
+  }
 }
