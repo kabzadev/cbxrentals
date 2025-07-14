@@ -56,7 +56,7 @@ export function DashboardPage() {
   useEffect(() => {
     const calculateCountdown = () => {
       const now = new Date();
-      const eventDate = new Date('2025-09-13T00:00:00'); // September 13, 2025
+      const eventDate = new Date('2025-09-12T00:00:00'); // September 12, 2025
       
       const diff = eventDate.getTime() - now.getTime();
       
@@ -309,7 +309,7 @@ export function DashboardPage() {
               <div className="text-[10px] lg:text-xs opacity-70">SEC</div>
             </div>
           </div>
-          <div className="text-[10px] lg:text-xs text-white/70 mt-1">Sept 13-15, 2025</div>
+          <div className="text-[10px] lg:text-xs text-white/70 mt-1">Sept 12-13, 2025</div>
         </div>
       </div>
 
