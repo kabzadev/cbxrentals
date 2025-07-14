@@ -931,7 +931,7 @@ export function CheckInWizard() {
                         disabled={isProcessing}
                         className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium disabled:opacity-50"
                       >
-                        {isProcessing ? 'Processing...' : "I've Sent Payment"}
+                        {isProcessing ? 'Processing...' : "Payment Sent"}
                       </Button>
                     </div>
                   </>

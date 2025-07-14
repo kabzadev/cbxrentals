@@ -268,7 +268,7 @@ export function DashboardPage() {
   };
 
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       <div className="mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
@@ -283,33 +283,33 @@ export function DashboardPage() {
         </div>
 
         {/* Compact Countdown Timer */}
-        <div className="bg-gradient-to-r from-[#e50914] to-[#b90710] rounded-lg p-3 lg:p-4">
+        <div className="bg-gradient-to-r from-[#e50914] to-[#b90710] rounded-lg p-3 lg:p-4 flex-shrink-0">
           <div className="flex items-center gap-2 text-white mb-1">
-            <CalendarDays className="h-4 w-4" />
-            <span className="text-sm font-semibold">CBX Experience</span>
+            <CalendarDays className="h-4 w-4 flex-shrink-0" />
+            <span className="text-sm font-semibold whitespace-nowrap">CBX Experience</span>
           </div>
-          <div className="flex items-center gap-3 text-white">
-            <div className="text-center">
-              <div className="text-lg lg:text-xl font-bold">{countdown.days}</div>
+          <div className="flex items-center gap-2 sm:gap-3 text-white">
+            <div className="text-center min-w-[2rem]">
+              <div className="text-base sm:text-lg lg:text-xl font-bold">{countdown.days}</div>
               <div className="text-[10px] lg:text-xs opacity-70">DAYS</div>
             </div>
-            <span className="text-lg">:</span>
-            <div className="text-center">
-              <div className="text-lg lg:text-xl font-bold">{countdown.hours}</div>
+            <span className="text-base sm:text-lg">:</span>
+            <div className="text-center min-w-[2rem]">
+              <div className="text-base sm:text-lg lg:text-xl font-bold">{countdown.hours}</div>
               <div className="text-[10px] lg:text-xs opacity-70">HRS</div>
             </div>
-            <span className="text-lg">:</span>
-            <div className="text-center">
-              <div className="text-lg lg:text-xl font-bold">{countdown.minutes}</div>
+            <span className="text-base sm:text-lg">:</span>
+            <div className="text-center min-w-[2rem]">
+              <div className="text-base sm:text-lg lg:text-xl font-bold">{countdown.minutes}</div>
               <div className="text-[10px] lg:text-xs opacity-70">MIN</div>
             </div>
-            <span className="text-lg">:</span>
-            <div className="text-center">
-              <div className="text-lg lg:text-xl font-bold">{countdown.seconds}</div>
+            <span className="text-base sm:text-lg">:</span>
+            <div className="text-center min-w-[2rem]">
+              <div className="text-base sm:text-lg lg:text-xl font-bold">{countdown.seconds}</div>
               <div className="text-[10px] lg:text-xs opacity-70">SEC</div>
             </div>
           </div>
-          <div className="text-[10px] lg:text-xs text-white/70 mt-1">Sept 12-13, 2025</div>
+          <div className="text-[10px] lg:text-xs text-white/70 mt-1 whitespace-nowrap">Sept 12-13, 2025</div>
         </div>
       </div>
 

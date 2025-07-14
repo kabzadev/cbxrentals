@@ -52,16 +52,32 @@
 @layer base {
   * {
     border-color: hsl(var(--border));
+    max-width: 100%;
   }
-  html, body, #root {
+  html {
     width: 100%;
     min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
+  
   body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     margin: 0;
     padding: 0;
+    -webkit-text-size-adjust: 100%;
+    position: relative;
+  }
+  
+  #root {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
   }
 }
 
@@ -79,5 +95,38 @@
   
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Mobile-first full-width container */
+  .mobile-container {
+    @apply w-full px-2;
+  }
+  
+  @media (min-width: 640px) {
+    .mobile-container {
+      @apply max-w-7xl mx-auto px-6;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .mobile-container {
+      @apply px-8;
+    }
+  }
+  
+  /* Prevent horizontal scroll on mobile */
+  @media (max-width: 640px) {
+    .grid {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    
+    [class*="gap-"] {
+      gap: 0.5rem !important;
+    }
+    
+    .rounded-lg {
+      border-radius: 0.375rem !important;
+    }
   }
 }
