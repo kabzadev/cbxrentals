@@ -90,6 +90,17 @@ const houses: House[] = [
     maxOccupancy: 0,
     color: '#F39C12',
     isSpecialLocation: true
+  },
+  {
+    id: 8,
+    name: 'Top Gun House',
+    address: '250 N Pacific St, Oceanside, CA 92054',
+    coordinates: { lat: 33.1945943, lng: -117.3832251 },
+    bedrooms: 0,
+    bathrooms: 0,
+    maxOccupancy: 0,
+    color: '#3498DB',
+    isSpecialLocation: true
   }
 ];
 
