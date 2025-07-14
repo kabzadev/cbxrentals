@@ -199,20 +199,20 @@ export function EventAttendanceReport() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className="space-y-6 px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-2 sm:gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate('/admin')}
-            className="h-8 w-8"
+            className="h-8 w-8 flex-shrink-0"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Event Attendance Report</h1>
-            <p className="text-gray-600">View attendees for each event</p>
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 break-words">Event Attendance Report</h1>
+            <p className="text-sm sm:text-base text-gray-600">View attendees for each event</p>
           </div>
         </div>
       </div>
@@ -239,7 +239,7 @@ export function EventAttendanceReport() {
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     <span>{event.title}</span>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-700">
                       - {format(new Date(event.event_date), 'MMM d')} at {format(new Date(`2000-01-01T${event.event_time}`), 'h:mm a')}
                     </span>
                     {event.is_optional && (
@@ -257,26 +257,26 @@ export function EventAttendanceReport() {
         <Card>
           <CardHeader>
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <CardTitle>{selectedEvent.title}</CardTitle>
-                <div className="flex gap-4 text-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <CardTitle className="text-lg sm:text-xl">{selectedEvent.title}</CardTitle>
+                <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-1">
-                    <Users className="h-4 w-4 text-gray-500" />
-                    <span className="font-medium">{interestedCount}</span>
-                    <span className="text-gray-500">
+                    <Users className="h-4 w-4 text-gray-600" />
+                    <span className="font-semibold text-gray-900">{interestedCount}</span>
+                    <span className="text-gray-700">
                       {selectedEvent.is_optional ? 'interested' : 'expected'}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    <span className="font-medium">{checkedInCount}</span>
-                    <span className="text-gray-500">checked in</span>
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <span className="font-semibold text-gray-900">{checkedInCount}</span>
+                    <span className="text-gray-700">checked in</span>
                   </div>
                 </div>
               </div>
-              <div className="text-sm text-gray-600">
-                <p>{format(new Date(selectedEvent.event_date), 'EEEE, MMMM d, yyyy')} at {format(new Date(`2000-01-01T${selectedEvent.event_time}`), 'h:mm a')}</p>
-                <p>{selectedEvent.location_name}</p>
+              <div className="text-sm space-y-1">
+                <p className="text-gray-700 font-medium">{format(new Date(selectedEvent.event_date), 'EEEE, MMMM d, yyyy')} at {format(new Date(`2000-01-01T${selectedEvent.event_time}`), 'h:mm a')}</p>
+                <p className="text-gray-600">{selectedEvent.location_name}</p>
               </div>
             </div>
           </CardHeader>
@@ -296,11 +296,11 @@ export function EventAttendanceReport() {
                   <table className="w-full">
                     <thead className="border-b">
                       <tr className="text-left">
-                        <th className="pb-3 font-medium text-gray-700">Name</th>
-                        <th className="pb-3 font-medium text-gray-700">Phone</th>
-                        <th className="pb-3 font-medium text-gray-700">House</th>
-                        <th className="pb-3 font-medium text-gray-700">Transportation</th>
-                        <th className="pb-3 font-medium text-gray-700">Status</th>
+                        <th className="pb-3 font-semibold text-gray-900">Name</th>
+                        <th className="pb-3 font-semibold text-gray-900">Phone</th>
+                        <th className="pb-3 font-semibold text-gray-900">House</th>
+                        <th className="pb-3 font-semibold text-gray-900">Transportation</th>
+                        <th className="pb-3 font-semibold text-gray-900">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">
@@ -308,14 +308,14 @@ export function EventAttendanceReport() {
                         <tr key={attendee.id} className="hover:bg-gray-50 transition-colors">
                           <td className="py-3">
                             <div className="flex items-center gap-2">
-                              <User className="h-4 w-4 text-gray-400" />
-                              <span className="font-medium text-gray-900">{attendee.name}</span>
+                              <User className="h-4 w-4 text-gray-500" />
+                              <span className="font-semibold text-gray-900">{attendee.name}</span>
                             </div>
                           </td>
                           <td className="py-3">
                             <a 
                               href={`tel:${attendee.phone}`}
-                              className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                              className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline transition-colors font-medium"
                             >
                               <Phone className="h-4 w-4" />
                               <span className="text-sm font-medium">{formatPhoneNumber(attendee.phone)}</span>
@@ -325,7 +325,7 @@ export function EventAttendanceReport() {
                             {attendee.property_name ? (
                               <Badge variant="outline">{attendee.property_name}</Badge>
                             ) : (
-                              <span className="text-gray-500">-</span>
+                              <span className="text-gray-600">-</span>
                             )}
                           </td>
                           <td className="py-3">
@@ -365,10 +365,10 @@ export function EventAttendanceReport() {
                   {attendees.map((attendee) => (
                     <Card key={attendee.id} className="p-4">
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <User className="h-5 w-5 text-gray-400" />
-                            <span className="font-medium text-gray-900">{attendee.name}</span>
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <User className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                            <span className="font-semibold text-gray-900 break-words">{attendee.name}</span>
                           </div>
                           {attendee.checked_in ? (
                             <Badge variant="success" className="gap-1">
@@ -383,32 +383,32 @@ export function EventAttendanceReport() {
                           )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                           <div>
-                            <p className="text-gray-500 mb-1">Phone</p>
+                            <p className="text-gray-700 font-medium mb-1">Phone</p>
                             <a 
                               href={`tel:${attendee.phone}`}
-                              className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                              className="inline-flex items-center gap-1 text-blue-700 hover:text-blue-900 font-medium"
                             >
                               <Phone className="h-3 w-3" />
-                              <span className="font-medium">{formatPhoneNumber(attendee.phone)}</span>
+                              <span>{formatPhoneNumber(attendee.phone)}</span>
                             </a>
                           </div>
 
                           <div>
-                            <p className="text-gray-500 mb-1">House</p>
+                            <p className="text-gray-700 font-medium mb-1">House</p>
                             {attendee.property_name ? (
                               <Badge variant="outline" className="text-xs">
                                 {attendee.property_name}
                               </Badge>
                             ) : (
-                              <span className="text-gray-400">-</span>
+                              <span className="text-gray-600">-</span>
                             )}
                           </div>
                         </div>
 
                         <div>
-                          <p className="text-gray-500 mb-1 text-sm">Transportation</p>
+                          <p className="text-gray-700 font-medium mb-1 text-sm">Transportation</p>
                           {attendee.has_rental_car ? (
                             <Badge variant="success" className="gap-1">
                               <Car className="h-3 w-3" />
