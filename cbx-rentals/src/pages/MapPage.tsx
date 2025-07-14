@@ -67,13 +67,24 @@ const options = {
   fullscreenControl: true,
 };
 
+// Create a custom marker icon
+const createMarkerIcon = (color: string): any => ({
+  url: `data:image/svg+xml,${encodeURIComponent(
+    `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" fill="${color}" stroke="#000" stroke-width="2" opacity="0.9"/>
+    </svg>`
+  )}`,
+  scaledSize: { width: 24, height: 24 },
+  anchor: { x: 12, y: 12 },
+});
+
 export function MapPage() {
   const [selectedHouse, setSelectedHouse] = useState<typeof houses[0] | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     // Fit all markers on the map
-    const bounds = new google.maps.LatLngBounds();
+    const bounds = new window.google.maps.LatLngBounds();
     houses.forEach(house => {
       bounds.extend(house.coordinates);
     });
@@ -162,14 +173,7 @@ export function MapPage() {
                   key={house.id}
                   position={house.coordinates}
                   onClick={() => setSelectedHouse(house)}
-                  icon={{
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 12,
-                    fillColor: house.color,
-                    fillOpacity: 0.9,
-                    strokeColor: '#000',
-                    strokeWeight: 2,
-                  }}
+                  icon={createMarkerIcon(house.color)}
                 />
               ))}
 
