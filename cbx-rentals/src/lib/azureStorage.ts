@@ -59,7 +59,8 @@ export const uploadPhotoToAzure = async (
       throw new Error(`Upload failed: ${response.statusText}`);
     }
     
-    const photoUrl = `${baseUrl}/${filename}`;
+    // Include SAS token in the photo URL for viewing
+    const photoUrl = `${baseUrl}/${filename}?${sasToken}`;
     
     // Track successful upload
     const uploadTime = Date.now() - startTime;
