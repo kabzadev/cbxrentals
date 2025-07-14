@@ -325,12 +325,12 @@ export function EventAttendanceReport() {
                         </td>
                         <td className="py-3">
                           {attendee.has_rental_car ? (
-                            <Badge variant="secondary" className="gap-1">
+                            <Badge variant="success" className="gap-1">
                               <Car className="h-3 w-3" />
-                              Has Vehicle
+                              Can Drive
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="gap-1">
+                            <Badge variant="warning" className="gap-1">
                               <Users className="h-3 w-3" />
                               Needs Ride
                             </Badge>
