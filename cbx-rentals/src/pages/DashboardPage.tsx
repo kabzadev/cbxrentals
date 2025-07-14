@@ -269,47 +269,48 @@ export function DashboardPage() {
 
   return (
     <div>
-      {/* Countdown Timer */}
-      <Card className="mb-6 bg-gradient-to-r from-[#e50914] to-[#b90710] border-none">
-        <CardContent className="p-6">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <CalendarDays className="h-6 w-6 text-white" />
-              <h2 className="text-xl font-bold text-white">CBX Experience Countdown</h2>
+      <div className="mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {userType === 'attendee' ? `Welcome, ${username}!` : 'Dashboard'}
+          </h1>
+          <p className="text-gray-600">
+            {userType === 'attendee' 
+              ? 'CBX Experience - Your event information' 
+              : 'Welcome to CBX Rentals management system'
+            }
+          </p>
+        </div>
+
+        {/* Compact Countdown Timer */}
+        <div className="bg-gradient-to-r from-[#e50914] to-[#b90710] rounded-lg p-3 lg:p-4">
+          <div className="flex items-center gap-2 text-white mb-1">
+            <CalendarDays className="h-4 w-4" />
+            <span className="text-sm font-semibold">CBX Experience</span>
+          </div>
+          <div className="flex items-center gap-3 text-white">
+            <div className="text-center">
+              <div className="text-lg lg:text-xl font-bold">{countdown.days}</div>
+              <div className="text-[10px] lg:text-xs opacity-70">DAYS</div>
             </div>
-            <p className="text-white/80 mb-4">September 13-15, 2025 • Oceanside, CA</p>
-            <div className="flex justify-center items-center gap-4 flex-wrap">
-              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
-                <div className="text-3xl font-bold text-white">{countdown.days}</div>
-                <div className="text-xs text-white/70 uppercase">Days</div>
-              </div>
-              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
-                <div className="text-3xl font-bold text-white">{countdown.hours}</div>
-                <div className="text-xs text-white/70 uppercase">Hours</div>
-              </div>
-              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
-                <div className="text-3xl font-bold text-white">{countdown.minutes}</div>
-                <div className="text-xs text-white/70 uppercase">Minutes</div>
-              </div>
-              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
-                <div className="text-3xl font-bold text-white">{countdown.seconds}</div>
-                <div className="text-xs text-white/70 uppercase">Seconds</div>
-              </div>
+            <span className="text-lg">:</span>
+            <div className="text-center">
+              <div className="text-lg lg:text-xl font-bold">{countdown.hours}</div>
+              <div className="text-[10px] lg:text-xs opacity-70">HRS</div>
+            </div>
+            <span className="text-lg">:</span>
+            <div className="text-center">
+              <div className="text-lg lg:text-xl font-bold">{countdown.minutes}</div>
+              <div className="text-[10px] lg:text-xs opacity-70">MIN</div>
+            </div>
+            <span className="text-lg">:</span>
+            <div className="text-center">
+              <div className="text-lg lg:text-xl font-bold">{countdown.seconds}</div>
+              <div className="text-[10px] lg:text-xs opacity-70">SEC</div>
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {userType === 'attendee' ? `Welcome, ${username}!` : 'Dashboard'}
-        </h1>
-        <p className="text-gray-600">
-          {userType === 'attendee' 
-            ? 'CBX Experience - Your event information' 
-            : 'Welcome to CBX Rentals management system'
-          }
-        </p>
+          <div className="text-[10px] lg:text-xs text-white/70 mt-1">Sept 13-15, 2025</div>
+        </div>
       </div>
 
       {userType === 'admin' && (
