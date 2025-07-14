@@ -55,6 +55,17 @@ window.addEventListener('unhandledrejection', (event) => {
 // Set authenticated user context (if available)
 export const setAuthenticatedUserContext = (userId: string, accountId?: string) => {
   appInsights.setAuthenticatedUserContext(userId, accountId);
+  // Also add to telemetry initializer to ensure all events have user context
+  appInsights.addTelemetryInitializer((envelope) => {
+    if (envelope.tags) {
+      envelope.tags['ai.user.authUserId'] = userId;
+      envelope.tags['ai.user.accountId'] = accountId || userId;
+    }
+    if (envelope.data) {
+      envelope.data.user = userId;
+    }
+    return true;
+  });
 };
 
 // Track custom events
@@ -64,7 +75,18 @@ export const trackEvent = (name: string, properties?: { [key: string]: any }) =>
 
 // Track exceptions
 export const trackException = (error: Error, properties?: { [key: string]: any }) => {
-  appInsights.trackException({ exception: error }, properties);
+  console.error('Tracking exception:', error, properties);
+  appInsights.trackException({ 
+    exception: error,
+    severityLevel: 3 // Error level
+  }, {
+    ...properties,
+    errorMessage: error.message,
+    errorStack: error.stack,
+    timestamp: new Date().toISOString(),
+    url: window.location.href,
+    userAgent: navigator.userAgent
+  });
 };
 
 // Track page views

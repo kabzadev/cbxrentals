@@ -59,7 +59,12 @@ export const useAuthStore = create<AuthState>()(
               attendeeData: null,
             });
             setAuthenticatedUserContext(username, 'admin');
-            trackEvent('Login', { userType: 'admin', method: 'hardcoded' });
+            trackEvent('Login', { 
+              userType: 'admin', 
+              method: 'hardcoded',
+              username: username,
+              userId: username 
+            });
             return true;
           }
 
@@ -71,6 +76,11 @@ export const useAuthStore = create<AuthState>()(
 
           if (error) {
             console.error('Supabase auth error:', error);
+            trackEvent('Supabase Auth Attempted', {
+              username,
+              error: error.message,
+              errorCode: error.code
+            });
             // Fallback to attendee login
             const formattedPhone = formatPhoneNumber(password);
             const { data: attendees, error: attendeeError } = await supabase
@@ -86,7 +96,18 @@ export const useAuthStore = create<AuthState>()(
               .eq('phone', formattedPhone);
 
             if (attendeeError || !attendees?.length) {
-              trackEvent('Login Failed', { userType: 'attendee', reason: 'not_found' });
+              trackEvent('Login Failed', { 
+                userType: 'attendee', 
+                reason: 'not_found',
+                attemptedUsername: username,
+                error: attendeeError?.message 
+              });
+              if (attendeeError) {
+                trackException(new Error(`Attendee login failed: ${attendeeError.message}`), {
+                  username,
+                  context: 'attendee_login'
+                });
+              }
               return false;
             }
 
@@ -106,7 +127,18 @@ export const useAuthStore = create<AuthState>()(
 
               if (!updateError) {
                 attendee.checked_in = true;
-                trackEvent('Auto Check-in', { attendeeName: attendee.name, reason: 'offsite' });
+                trackEvent('Auto Check-in', { 
+                  attendeeName: attendee.name, 
+                  attendeeId: attendee.id,
+                  reason: 'offsite',
+                  success: true 
+                });
+              } else {
+                trackException(new Error(`Auto check-in failed: ${updateError.message}`), {
+                  attendeeName: attendee.name,
+                  attendeeId: attendee.id,
+                  context: 'auto_checkin_offsite'
+                });
               }
             }
 
@@ -119,7 +151,14 @@ export const useAuthStore = create<AuthState>()(
               attendeeData: attendee,
             });
             setAuthenticatedUserContext(attendee.name, 'attendee');
-            trackEvent('Login', { userType: 'attendee', method: 'phone', isOffsite });
+            trackEvent('Login', { 
+              userType: 'attendee', 
+              method: 'phone', 
+              isOffsite,
+              username: attendee.name,
+              userId: attendee.id,
+              email: attendee.email 
+            });
             return true;
           }
 
@@ -135,7 +174,18 @@ export const useAuthStore = create<AuthState>()(
           return true;
         } catch (error) {
           console.error('Login error:', error);
-          trackException(error as Error, { context: 'login' });
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          trackException(error as Error, { 
+            context: 'login',
+            username,
+            errorMessage,
+            stack: error instanceof Error ? error.stack : undefined
+          });
+          trackEvent('Login Error', {
+            username,
+            error: errorMessage,
+            type: 'unexpected_error'
+          });
           return false;
         }
       },
