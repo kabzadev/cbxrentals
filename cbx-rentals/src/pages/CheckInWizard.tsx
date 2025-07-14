@@ -127,7 +127,7 @@ export function CheckInWizard() {
     if (hasRentalCar === null) {
       toast({
         title: 'Missing Information',
-        description: 'Please indicate whether you have a rental car.',
+        description: 'Please indicate whether you have a vehicle.',
         variant: 'destructive',
       });
       return;
@@ -531,12 +531,12 @@ export function CheckInWizard() {
 
                   <div className="space-y-3">
                     <Label className="text-gray-900 font-semibold">
-                      Do you have a rental car? <span className="text-red-500">*</span>
+                      Do you have a vehicle? <span className="text-red-500">*</span>
                     </Label>
                     <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
                       <div className="flex items-center gap-3">
                         <Car className="w-5 h-5 text-gray-700" />
-                        <span className="text-gray-900 font-medium">Rental Car:</span>
+                        <span className="text-gray-900 font-medium">Vehicle:</span>
                       </div>
                       <div className="flex gap-2">
                         <Button
