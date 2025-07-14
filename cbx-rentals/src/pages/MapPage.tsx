@@ -5,7 +5,19 @@ import { MapPin, Home, Users } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
 
 // House data with coordinates
-const houses = [
+type House = {
+  id: number;
+  name: string;
+  address: string;
+  coordinates: { lat: number; lng: number };
+  bedrooms: number;
+  bathrooms: number;
+  maxOccupancy: number;
+  color: string;
+  isSpecialLocation?: boolean;
+};
+
+const houses: House[] = [
   {
     id: 1,
     name: 'House 1',
@@ -45,6 +57,17 @@ const houses = [
     bathrooms: 2,
     maxOccupancy: 4,
     color: '#95E1D3'
+  },
+  {
+    id: 5,
+    name: 'Coach Clark',
+    address: '1440 Rock Springs Rd, Escondido, CA 92026',
+    coordinates: { lat: 33.1586, lng: -117.0986 },
+    bedrooms: 0,
+    bathrooms: 0,
+    maxOccupancy: 0,
+    color: '#9B59B6',
+    isSpecialLocation: true
   }
 ];
 
@@ -131,14 +154,18 @@ export function MapPage() {
                       <MapPin className="inline h-4 w-4 mr-1" />
                       {house.address}
                     </p>
-                    <div className="flex gap-4 text-sm">
-                      <span>{house.bedrooms} bedrooms</span>
-                      <span>{house.bathrooms} bathrooms</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm">
-                      <Users className="h-4 w-4" />
-                      <span>Max {house.maxOccupancy} guests</span>
-                    </div>
+                    {!house.isSpecialLocation && (
+                      <>
+                        <div className="flex gap-4 text-sm">
+                          <span>{house.bedrooms} bedrooms</span>
+                          <span>{house.bathrooms} bathrooms</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm">
+                          <Users className="h-4 w-4" />
+                          <span>Max {house.maxOccupancy} guests</span>
+                        </div>
+                      </>
+                    )}
                   </CardContent>
                 </Card>
               ))}
@@ -188,13 +215,15 @@ export function MapPage() {
                       {selectedHouse.name}
                     </h3>
                     <p className="text-sm text-gray-600 mb-2">{selectedHouse.address}</p>
-                    <div className="space-y-1">
-                      <p className="text-sm">{selectedHouse.bedrooms} bedrooms, {selectedHouse.bathrooms} bathrooms</p>
-                      <Badge variant="outline" className="text-xs">
-                        <Users className="h-3 w-3 mr-1" />
-                        Max {selectedHouse.maxOccupancy} guests
-                      </Badge>
-                    </div>
+                    {!selectedHouse.isSpecialLocation && (
+                      <div className="space-y-1">
+                        <p className="text-sm">{selectedHouse.bedrooms} bedrooms, {selectedHouse.bathrooms} bathrooms</p>
+                        <Badge variant="outline" className="text-xs">
+                          <Users className="h-3 w-3 mr-1" />
+                          Max {selectedHouse.maxOccupancy} guests
+                        </Badge>
+                      </div>
+                    )}
                   </div>
                 </InfoWindow>
               )}
@@ -224,9 +253,11 @@ export function MapPage() {
                     {house.name}
                   </h4>
                   <p className="text-sm text-gray-600 mt-1">{house.address}</p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {house.bedrooms}BR / {house.bathrooms}BA • Max {house.maxOccupancy}
-                  </p>
+                  {!house.isSpecialLocation && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      {house.bedrooms}BR / {house.bathrooms}BA • Max {house.maxOccupancy}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
