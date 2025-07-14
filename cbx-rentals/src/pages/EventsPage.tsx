@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { CalendarIcon, Clock, MapPin, Navigation, Star, Plus, Edit2, Trash2, Save, X } from 'lucide-react';
@@ -13,6 +13,7 @@ import { trackEvent, trackException } from '../lib/appInsights';
 
 export function EventsPage() {
   const { userType, attendeeData } = useAuthStore();
+  const eventFormRef = useRef<HTMLDivElement>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [eventInterests, setEventInterests] = useState<Record<string, any>>({});
   const [editingEvent, setEditingEvent] = useState<any>(null);
@@ -30,6 +31,13 @@ export function EventsPage() {
     map_url: ''
   });
   const { toast } = useToast();
+
+  // Scroll to form when it's shown
+  useEffect(() => {
+    if (showEventForm && eventFormRef.current) {
+      eventFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [showEventForm]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -390,7 +398,7 @@ export function EventsPage() {
   };
 
   const renderEventForm = () => (
-    <Card className="bg-white border-gray-200 mb-6">
+    <Card ref={eventFormRef} className="bg-white border-gray-200 mb-6">
       <CardHeader>
         <CardTitle className="text-gray-900">
           {editingEvent ? 'Edit Event' : 'Add New Event'}
@@ -407,6 +415,7 @@ export function EventsPage() {
                 onChange={(e) => setEventFormData({ ...eventFormData, title: e.target.value })}
                 className="bg-white border-gray-300 text-gray-900"
                 placeholder="Enter event title"
+                autoFocus
               />
             </div>
 
