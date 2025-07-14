@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon } from 'lucide-react';
+import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useState } from 'react';
@@ -20,6 +20,7 @@ export function Navigation() {
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/events', label: 'Events', icon: CalendarIcon },
     { path: '/attendees', label: 'Attendees', icon: Users },
+    { path: '/map', label: 'Map', icon: MapPin },
     { path: '/check-in', label: 'Guest Check-In', icon: UserCheck },
   ].filter(item => {
     // Hide Guest Check-In for admin and attendee users

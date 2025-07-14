@@ -7,6 +7,7 @@ import { AttendeeDetailsPage } from './pages/AttendeeDetailsPage'
 import { PropertyDetailsPage } from './pages/PropertyDetailsPage'
 import { CheckInPage } from './pages/CheckInPage'
 import { CheckInWizard } from './pages/CheckInWizard'
+import { MapPage } from './pages/MapPage'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Layout } from './components/Layout'
 import { Toaster } from './components/ui/toaster'
@@ -27,6 +28,7 @@ function App() {
               <Route path="/attendees" element={<AttendeesPage />} />
               <Route path="/attendees/:id" element={<AttendeeDetailsPage />} />
               <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+              <Route path="/map" element={<MapPage />} />
             </Route>
           </Route>
         </Routes>
