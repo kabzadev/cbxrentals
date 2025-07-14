@@ -11,10 +11,10 @@ import { ChevronLeft } from 'lucide-react';
 
 interface Event {
   id: string;
-  name: string;
-  date: string;
-  time: string;
-  location: string;
+  title: string;
+  event_date: string;
+  event_time: string;
+  location_name: string;
   is_optional: boolean;
 }
 
@@ -53,8 +53,8 @@ export function EventAttendanceReport() {
       const { data, error } = await supabase
         .from('events')
         .select('*')
-        .order('date', { ascending: true })
-        .order('time', { ascending: true });
+        .order('event_date', { ascending: true })
+        .order('event_time', { ascending: true });
 
       if (error) throw error;
 
@@ -238,9 +238,9 @@ export function EventAttendanceReport() {
                 <SelectItem key={event.id} value={event.id}>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    <span>{event.name}</span>
+                    <span>{event.title}</span>
                     <span className="text-sm text-gray-500">
-                      - {format(new Date(event.date), 'MMM d')} at {format(new Date(`2000-01-01T${event.time}`), 'h:mm a')}
+                      - {format(new Date(event.event_date), 'MMM d')} at {format(new Date(`2000-01-01T${event.event_time}`), 'h:mm a')}
                     </span>
                     {event.is_optional && (
                       <Badge variant="outline" className="ml-2">Optional</Badge>
@@ -258,7 +258,7 @@ export function EventAttendanceReport() {
           <CardHeader>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <CardTitle>{selectedEvent.name}</CardTitle>
+                <CardTitle>{selectedEvent.title}</CardTitle>
                 <div className="flex gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <Users className="h-4 w-4 text-gray-500" />
@@ -275,8 +275,8 @@ export function EventAttendanceReport() {
                 </div>
               </div>
               <div className="text-sm text-gray-600">
-                <p>{format(new Date(selectedEvent.date), 'EEEE, MMMM d, yyyy')} at {format(new Date(`2000-01-01T${selectedEvent.time}`), 'h:mm a')}</p>
-                <p>{selectedEvent.location}</p>
+                <p>{format(new Date(selectedEvent.event_date), 'EEEE, MMMM d, yyyy')} at {format(new Date(`2000-01-01T${selectedEvent.event_time}`), 'h:mm a')}</p>
+                <p>{selectedEvent.location_name}</p>
               </div>
             </div>
           </CardHeader>
