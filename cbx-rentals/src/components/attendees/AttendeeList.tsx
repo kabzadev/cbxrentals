@@ -144,6 +144,18 @@ export function AttendeeList() {
       return new Date(year, month - 1, day)
     }
     
+    // Special handling for off-site attendees
+    if (currentBooking.property?.name === 'Off-site') {
+      return {
+        property: 'Off-site',
+        checkIn: format(parseLocalDate(currentBooking.arrival_date), 'MMM d, yyyy'),
+        checkOut: format(parseLocalDate(currentBooking.exit_date), 'MMM d, yyyy'),
+        totalAmount: 0,
+        hasUnpaid: false,
+        checkInDate: parseLocalDate(currentBooking.arrival_date)
+      }
+    }
+
     return {
       property: currentBooking.property?.name || 'Unknown Property',
       checkIn: format(parseLocalDate(currentBooking.arrival_date), 'MMM d, yyyy'),
