@@ -157,7 +157,7 @@ export function PhotosPage() {
       });
       toast({
         title: 'Error',
-        description: 'Failed to upload photo',
+        description: result.error || 'Failed to upload photo',
         variant: 'destructive',
       });
     } finally {

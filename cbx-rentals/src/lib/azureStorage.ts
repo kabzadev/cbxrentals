@@ -1,6 +1,6 @@
 import { trackEvent, trackException, trackMetric } from './appInsights';
 
-const STORAGE_URL = import.meta.env.VITE_AZURE_STORAGE_SAS_URL;
+const STORAGE_URL = import.meta.env.VITE_AZURE_STORAGE_SAS_URL ? decodeURIComponent(import.meta.env.VITE_AZURE_STORAGE_SAS_URL) : undefined;
 
 export interface UploadResult {
   success: boolean;
@@ -15,6 +15,11 @@ export const uploadPhotoToAzure = async (
   const startTime = Date.now();
   
   try {
+    // Check if storage URL is configured
+    if (!STORAGE_URL) {
+      throw new Error('Azure Storage is not configured. Please set VITE_AZURE_STORAGE_SAS_URL in your environment variables.');
+    }
+    
     // Validate file
     if (!file.type.startsWith('image/')) {
       throw new Error('File must be an image');
@@ -31,10 +36,17 @@ export const uploadPhotoToAzure = async (
     const extension = file.name.split('.').pop() || 'jpg';
     const filename = `${sanitizedName}_${timestamp}.${extension}`;
     
-    // Upload to Azure Blob Storage
-    const uploadUrl = `${STORAGE_URL}&comp=block&blockid=${btoa(filename)}`;
+    // Parse the storage URL
+    const urlParts = STORAGE_URL.split('?');
+    if (urlParts.length !== 2) {
+      throw new Error('Invalid Azure Storage SAS URL format');
+    }
     
-    const response = await fetch(`${STORAGE_URL.split('?')[0]}/${filename}?${STORAGE_URL.split('?')[1]}`, {
+    const baseUrl = urlParts[0];
+    const sasToken = urlParts[1];
+    
+    // Upload to Azure Blob Storage
+    const response = await fetch(`${baseUrl}/${filename}?${sasToken}`, {
       method: 'PUT',
       headers: {
         'x-ms-blob-type': 'BlockBlob',
@@ -47,7 +59,7 @@ export const uploadPhotoToAzure = async (
       throw new Error(`Upload failed: ${response.statusText}`);
     }
     
-    const photoUrl = `${STORAGE_URL.split('?')[0]}/${filename}`;
+    const photoUrl = `${baseUrl}/${filename}`;
     
     // Track successful upload
     const uploadTime = Date.now() - startTime;
