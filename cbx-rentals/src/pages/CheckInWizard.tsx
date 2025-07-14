@@ -141,7 +141,7 @@ export function CheckInWizard() {
     }
   };
 
-  const handleSaveArrivalDetails = async () => {
+  const handleSaveArrivalDetails = async (retryCount = 0) => {
     // Validation
     if (!arrivalTime) {
       toast({
@@ -163,15 +163,29 @@ export function CheckInWizard() {
 
     setIsProcessing(true);
     try {
-      const { error } = await supabase
+      // Log the update attempt
+      console.log('Updating arrival details for:', {
+        attendeeId: attendee.id,
+        attendeeName: attendee.name,
+        hasRentalCar,
+        interestedInCarpool
+      });
+
+      const { data, error } = await supabase
         .from('attendees')
         .update({
           has_rental_car: hasRentalCar,
           interested_in_carpool: interestedInCarpool || false
         })
-        .eq('id', attendee.id);
+        .eq('id', attendee.id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Update successful:', data);
 
       trackEvent('Check-In Arrival Details', {
         attendeeName: attendee.name,
@@ -189,14 +203,36 @@ export function CheckInWizard() {
       handleNext();
     } catch (error) {
       console.error('Arrival details error:', error);
+      
+      // Check if it's a network error
+      const isNetworkError = error instanceof TypeError && error.message === 'Load failed';
+      
+      // Retry logic for network errors
+      if (isNetworkError && retryCount < 2) {
+        console.log(`Retrying arrival details save (attempt ${retryCount + 2}/3)...`);
+        setTimeout(() => {
+          handleSaveArrivalDetails(retryCount + 1);
+        }, 1000); // Wait 1 second before retry
+        return;
+      }
+      
+      const errorMessage = isNetworkError 
+        ? 'Network connection error. Please check your internet connection and try again.'
+        : 'Failed to save arrival details. Please try again.';
+      
       trackException(error as Error, {
         context: 'arrival_details_save',
         attendeeName: attendee.name,
-        attendeeId: attendee.id
+        attendeeId: attendee.id,
+        isNetworkError,
+        errorType: error?.constructor?.name,
+        errorMessage: error?.message,
+        retryCount
       });
+      
       toast({
-        title: 'Error',
-        description: 'Failed to save arrival details. Please try again.',
+        title: isNetworkError ? 'Connection Error' : 'Error',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
