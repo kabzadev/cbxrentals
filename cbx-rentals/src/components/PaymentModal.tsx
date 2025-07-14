@@ -63,30 +63,30 @@ export function PaymentModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto mx-4">
         <DialogHeader className="sticky top-0 bg-background z-10 pb-2">
-          <DialogTitle>Make Payment - {formatCurrency(amount)}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-base sm:text-lg">Make Payment - {formatCurrency(amount)}</DialogTitle>
+          <DialogDescription className="text-sm">
             Scan the QR code below with your Venmo app to send payment
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4 pb-2">
+        <div className="space-y-3 pb-2">
           {/* Venmo QR Code */}
-          <div className="flex justify-center p-2 sm:p-4 bg-white rounded-lg">
+          <div className="flex justify-center p-2 bg-white rounded-lg">
             <img 
               src="/venmo-qr.png" 
               alt="Venmo QR Code" 
-              className="w-48 h-48 sm:w-64 sm:h-64"
+              className="w-36 h-36 sm:w-48 sm:h-48"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 const fallback = e.currentTarget.nextElementSibling;
                 if (fallback) fallback.classList.remove('hidden');
               }}
             />
-            <div className="w-48 h-48 sm:w-64 sm:h-64 bg-gray-100 rounded flex flex-col items-center justify-center hidden">
-              <QrCode className="w-16 h-16 text-gray-400 mb-2" />
-              <p className="text-sm text-gray-600 text-center px-4">
+            <div className="w-36 h-36 sm:w-48 sm:h-48 bg-gray-100 rounded flex flex-col items-center justify-center hidden">
+              <QrCode className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-2" />
+              <p className="text-xs sm:text-sm text-gray-600 text-center px-2">
                 Please save the Venmo QR code image as<br/>
                 <code className="text-xs bg-gray-200 px-1 py-0.5 rounded">/public/venmo-qr.png</code>
               </p>
@@ -94,13 +94,13 @@ export function PaymentModal({
           </div>
 
           {/* All Payment Options */}
-          <div className="space-y-3">
-            <h4 className="font-semibold text-gray-900">Payment Options:</h4>
+          <div className="space-y-2">
+            <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Payment Options:</h4>
             
             {/* Venmo Instructions */}
-            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
-              <h5 className="font-medium text-purple-900 mb-2">Venmo (QR code above)</h5>
-              <div className="text-sm text-purple-800">
+            <div className="bg-purple-50 rounded-lg p-2.5 sm:p-3 border border-purple-200">
+              <h5 className="font-medium text-purple-900 mb-1 text-sm">Venmo (QR code above)</h5>
+              <div className="text-xs sm:text-sm text-purple-800 space-y-0.5">
                 <p><strong>Username:</strong> @KeithKabza</p>
                 <p><strong>Amount:</strong> {formatCurrency(amount)}</p>
                 <p><strong>Note:</strong> "CBX Experience - {attendeeName}"</p>
@@ -108,13 +108,13 @@ export function PaymentModal({
             </div>
 
             {/* Zelle Option */}
-            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
+            <div className="bg-emerald-50 rounded-lg p-2.5 sm:p-3 border border-emerald-200">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <DollarSign className="w-6 h-6 text-emerald-600" />
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
                   <div>
-                    <h5 className="font-medium text-emerald-900">Zelle</h5>
-                    <p className="text-sm font-semibold text-emerald-900">727-455-3833</p>
+                    <h5 className="font-medium text-emerald-900 text-sm">Zelle</h5>
+                    <p className="text-xs sm:text-sm font-semibold text-emerald-900">727-455-3833</p>
                   </div>
                 </div>
                 <span className="text-xs text-emerald-700">Phone number</span>
@@ -122,13 +122,13 @@ export function PaymentModal({
             </div>
 
             {/* PayPal Option */}
-            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+            <div className="bg-blue-50 rounded-lg p-2.5 sm:p-3 border border-blue-200">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <CreditCard className="w-6 h-6 text-blue-600" />
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                   <div>
-                    <h5 className="font-medium text-blue-900">PayPal</h5>
-                    <p className="text-sm font-semibold text-blue-900">keith@visualgov.com</p>
+                    <h5 className="font-medium text-blue-900 text-sm">PayPal</h5>
+                    <p className="text-xs sm:text-sm font-semibold text-blue-900">keith@visualgov.com</p>
                   </div>
                 </div>
               </div>
@@ -136,14 +136,14 @@ export function PaymentModal({
           </div>
 
           {/* Confirmation Button */}
-          <div className="pt-4 border-t">
-            <p className="text-sm text-gray-600 mb-3">
+          <div className="pt-3 border-t">
+            <p className="text-xs sm:text-sm text-gray-600 mb-2">
               After sending payment via Venmo, Zelle, or PayPal, click the button below to confirm:
             </p>
             <Button
               onClick={handlePaymentConfirmation}
               disabled={isProcessing}
-              className="w-full bg-[#3D95CE] hover:bg-[#3D95CE]/90 text-white"
+              className="w-full bg-[#3D95CE] hover:bg-[#3D95CE]/90 text-white text-sm sm:text-base"
             >
               <Check className="h-4 w-4 mr-2" />
               {isProcessing ? 'Recording Payment...' : 'I\'ve Sent the Payment'}

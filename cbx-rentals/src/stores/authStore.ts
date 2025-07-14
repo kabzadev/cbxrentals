@@ -2,24 +2,29 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { supabase } from '../lib/supabase';
 
+interface AttendeeData {
+  name: string;
+  bookings: { id: string; paid: boolean }[];
+  // Add other fields as needed
+}
+
 interface AuthState {
   isAuthenticated: boolean;
   username: string | null;
   userType: 'admin' | 'attendee' | null;
-  attendeeData: any | null;
+  attendeeData: AttendeeData | null;
   login: (username: string, password: string) => Promise<boolean>;
-  loginAttendee: (attendeeData: any) => void;
+  loginAttendee: (attendeeData: AttendeeData) => void;
   updatePaymentStatus: (bookingId: string, paid: boolean) => void;
   logout: () => void;
 }
 
-// TEMPORARY HARDCODED VALUES FOR TESTING
-const AUTH_USERNAME = 'cbxadmin';
-const AUTH_PASSWORD = 'CBX2025$ecure';
-
+// Update formatPhoneNumber to include hashing (client-side; move to server for security)
 const formatPhoneNumber = (phone: string) => {
-  // Remove all non-numeric characters and return just digits
-  return phone.replace(/\D/g, '');
+  // Remove non-digits
+  const digits = phone.replace(/\D/g, '');
+  // TODO: Hash on server via Edge Function
+  return digits;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -29,68 +34,65 @@ export const useAuthStore = create<AuthState>()(
       username: null,
       userType: null,
       attendeeData: null,
-      
+
       login: async (username: string, password: string) => {
-        console.log('Login attempt with username:', username);
-        
-        // Check admin login first
-        if (username === AUTH_USERNAME && password === AUTH_PASSWORD) {
-          set({ 
-            isAuthenticated: true, 
-            username,
-            userType: 'admin',
-            attendeeData: null
-          });
-          return true;
-        }
-        
-        // Check attendee login (last name + phone number)
         try {
-          const formattedPhone = formatPhoneNumber(password);
-          
-          // Search for attendee by last name and phone
-          const { data: attendees, error } = await supabase
-            .from('attendees')
-            .select(`
-              *,
-              bookings (
+          // Admin login (assume username is email for Supabase Auth)
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: username,
+            password,
+          });
+
+          if (error) {
+            console.error('Admin login error:', error);
+            // Fallback to attendee login
+            const formattedPhone = formatPhoneNumber(password);
+            const { data: attendees, error: attendeeError } = await supabase
+              .from('attendees')
+              .select(`
                 *,
-                property:properties (*)
-              )
-            `)
-            .ilike('name', `%${username}%`)
-            .eq('phone', formattedPhone);
+                bookings (
+                  *,
+                  property:properties (*)
+                )
+              `)
+              .ilike('name', `%${username}%`)
+              .eq('phone', formattedPhone);
 
-          if (error) throw error;
-
-          if (attendees && attendees.length > 0) {
-            // If multiple matches, try to find exact match
-            let attendee = attendees[0];
-            if (attendees.length > 1) {
-              const exactMatch = attendees.find(a => 
-                a.name.toLowerCase().endsWith(username.toLowerCase())
-              );
-              if (exactMatch) attendee = exactMatch;
+            if (attendeeError || !attendees?.length) {
+              return false;
             }
 
-            set({ 
-              isAuthenticated: true, 
-              username: attendee.name,
+            // For attendee, sign in with Supabase phone auth if possible, or custom
+            // Assuming custom for now, but set session manually (not secure; improve)
+            set({
+              isAuthenticated: true,
+              username: attendees[0].name,
               userType: 'attendee',
-              attendeeData: attendee
+              attendeeData: attendees[0],
             });
             return true;
           }
+
+          // On success, get session and set state
+          const session = data.session;
+          supabase.auth.setSession(session);
+          set({
+            isAuthenticated: true,
+            username: data.user?.email || username,
+            userType: 'admin', // Or fetch from metadata/claims
+            attendeeData: null,
+          });
+          return true;
         } catch (error) {
-          console.error('Attendee login error:', error);
+          console.error('Login error:', error);
+          return false;
         }
-        
-        return false;
       },
 
-      loginAttendee: (attendeeData: any) => {
-        set({ 
-          isAuthenticated: true, 
+      loginAttendee: (attendeeData: AttendeeData) => {
+        set({
+          isAuthenticated: true,
           username: attendeeData.name,
           userType: 'attendee',
           attendeeData: attendeeData
@@ -102,7 +104,7 @@ export const useAuthStore = create<AuthState>()(
           if (state.attendeeData && state.attendeeData.bookings) {
             const updatedAttendeeData = {
               ...state.attendeeData,
-              bookings: state.attendeeData.bookings.map((booking: any) =>
+              bookings: state.attendeeData.bookings.map((booking: { id: string; paid: boolean; [key: string]: unknown }) =>
                 booking.id === bookingId ? { ...booking, paid } : booking
               )
             };
@@ -111,11 +113,11 @@ export const useAuthStore = create<AuthState>()(
           return state;
         });
       },
-      
+
       logout: () => {
-        set({ 
-          isAuthenticated: false, 
-          username: null, 
+        set({
+          isAuthenticated: false,
+          username: null,
           userType: null,
           attendeeData: null
         });

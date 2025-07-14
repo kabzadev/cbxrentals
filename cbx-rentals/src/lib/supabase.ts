@@ -8,7 +8,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    storage: window.localStorage,
+  }
+});
 
 // Test function to verify connection
 export async function testSupabaseConnection() {
@@ -17,12 +22,12 @@ export async function testSupabaseConnection() {
       .from('properties')
       .select('count')
       .limit(1)
-    
+
     if (error) {
       console.error('Supabase connection test failed:', error)
       return false
     }
-    
+
     console.log('Supabase connection successful')
     return true
   } catch (error) {

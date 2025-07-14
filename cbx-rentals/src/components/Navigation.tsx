@@ -1,9 +1,15 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin } from 'lucide-react';
+import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -64,6 +70,42 @@ export function Navigation() {
                   </Link>
                 );
               })}
+              
+              {/* Reports Dropdown - Only for admin */}
+              {userType === 'admin' && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className={cn(
+                        "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                        location.pathname.startsWith('/reports')
+                          ? "border-[#e50914] text-white"
+                          : "border-transparent text-gray-400 hover:border-gray-600 hover:text-gray-200"
+                      )}
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      Reports
+                      <ChevronDown className="w-3 h-3 ml-1" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-[#303030] border-[#505050]">
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/reports/rental-cars')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <Car className="w-4 h-4 mr-2" />
+                      Rental Cars
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/reports/ride-share')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Ride Share Requests
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           </div>
 
@@ -124,6 +166,48 @@ export function Navigation() {
                 </Link>
               );
             })}
+            
+            {/* Reports Section - Only for admin */}
+            {userType === 'admin' && (
+              <>
+                <div className="pl-3 pr-4 py-2 text-sm font-medium text-gray-400">
+                  <div className="flex items-center">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Reports
+                  </div>
+                </div>
+                <Link
+                  to="/reports/rental-cars"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/reports/rental-cars'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <Car className="w-4 h-4 mr-2" />
+                    Rental Cars
+                  </div>
+                </Link>
+                <Link
+                  to="/reports/ride-share"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/reports/ride-share'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Ride Share Requests
+                  </div>
+                </Link>
+              </>
+            )}
           </div>
           <div className="pt-4 pb-3 border-t border-[#505050]">
             <div className="flex items-center px-4">
