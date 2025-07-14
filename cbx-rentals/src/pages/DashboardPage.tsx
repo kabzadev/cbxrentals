@@ -4,8 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { PropertyList } from '../components/properties/PropertyList';
 import { PropertyImages } from '../components/properties/PropertyImages';
 import { useNavigate } from 'react-router-dom';
-import { HomeIcon, UsersIcon, DollarSign, CheckCircle, Phone, User, Calendar, Clock } from 'lucide-react';
-import { format } from 'date-fns';
+import { HomeIcon, UsersIcon, DollarSign, CheckCircle, Phone, User, Calendar, Clock, CalendarDays } from 'lucide-react';
+import { format, differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns';
 import { formatCurrency } from '../lib/utils';
 import { formatPhoneNumber } from '../lib/formatters';
 import { useAuthStore } from '../stores/authStore';
@@ -19,6 +19,7 @@ export function DashboardPage() {
   const [confirmedCount, setConfirmedCount] = useState(0);
   const [totalAttendees, setTotalAttendees] = useState(24);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +51,35 @@ export function DashboardPage() {
 
     fetchData();
   }, [userType, attendeeData]);
+
+  // Countdown timer effect
+  useEffect(() => {
+    const calculateCountdown = () => {
+      const now = new Date();
+      const eventDate = new Date('2025-09-13T00:00:00'); // September 13, 2025
+      
+      const diff = eventDate.getTime() - now.getTime();
+      
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        setCountdown({ days, hours, minutes, seconds });
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    // Calculate immediately
+    calculateCountdown();
+    
+    // Update every second
+    const interval = setInterval(calculateCountdown, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const stats = [
     {
@@ -239,6 +269,37 @@ export function DashboardPage() {
 
   return (
     <div>
+      {/* Countdown Timer */}
+      <Card className="mb-6 bg-gradient-to-r from-[#e50914] to-[#b90710] border-none">
+        <CardContent className="p-6">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <CalendarDays className="h-6 w-6 text-white" />
+              <h2 className="text-xl font-bold text-white">CBX Experience Countdown</h2>
+            </div>
+            <p className="text-white/80 mb-4">September 13-15, 2025 • Oceanside, CA</p>
+            <div className="flex justify-center items-center gap-4 flex-wrap">
+              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
+                <div className="text-3xl font-bold text-white">{countdown.days}</div>
+                <div className="text-xs text-white/70 uppercase">Days</div>
+              </div>
+              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
+                <div className="text-3xl font-bold text-white">{countdown.hours}</div>
+                <div className="text-xs text-white/70 uppercase">Hours</div>
+              </div>
+              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
+                <div className="text-3xl font-bold text-white">{countdown.minutes}</div>
+                <div className="text-xs text-white/70 uppercase">Minutes</div>
+              </div>
+              <div className="bg-black/20 rounded-lg px-4 py-3 min-w-[80px]">
+                <div className="text-3xl font-bold text-white">{countdown.seconds}</div>
+                <div className="text-xs text-white/70 uppercase">Seconds</div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">
           {userType === 'attendee' ? `Welcome, ${username}!` : 'Dashboard'}
