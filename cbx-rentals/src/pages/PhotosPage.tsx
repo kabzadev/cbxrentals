@@ -6,7 +6,7 @@ import { useAuthStore } from '../stores/authStore';
 import { supabase } from '../lib/supabase';
 import { uploadPhotoToAzure } from '../lib/azureStorage';
 import { useToast } from '../components/ui/use-toast';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { trackEvent, trackException } from '../lib/appInsights';
 import {
   AlertDialog,
@@ -44,6 +44,15 @@ export function PhotosPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const carouselInterval = useRef<NodeJS.Timeout>();
+
+  // Helper function to parse UTC timestamp and ensure proper display
+  const parseTimestamp = (timestamp: string): Date => {
+    // If timestamp doesn't end with 'Z', add it to ensure UTC parsing
+    if (!timestamp.endsWith('Z') && !timestamp.includes('+')) {
+      return parseISO(timestamp + 'Z');
+    }
+    return parseISO(timestamp);
+  };
 
   useEffect(() => {
     loadPhotos();
@@ -220,7 +229,9 @@ export function PhotosPage() {
   const groupPhotosByDay = () => {
     const groups: Record<string, Photo[]> = {};
     photos.forEach(photo => {
-      const date = format(new Date(photo.uploaded_at), 'yyyy-MM-dd');
+      // Parse the UTC timestamp and convert to local date for grouping
+      const localDate = parseTimestamp(photo.uploaded_at);
+      const date = format(localDate, 'yyyy-MM-dd');
       if (!groups[date]) {
         groups[date] = [];
       }
@@ -366,7 +377,7 @@ export function PhotosPage() {
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
                   <p className="text-white text-sm">
                     Uploaded by {photos[carouselIndex]?.attendee?.name || 'Unknown'} • {' '}
-                    {format(new Date(photos[carouselIndex]?.uploaded_at), 'MMM d, yyyy h:mm a')}
+                    {photos[carouselIndex] && format(parseTimestamp(photos[carouselIndex].uploaded_at), 'MMM d, yyyy h:mm a')}
                   </p>
                 </div>
 
@@ -395,7 +406,7 @@ export function PhotosPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">
                       <Calendar className="w-5 h-5" />
-                      {format(new Date(date), 'EEEE, MMMM d, yyyy')}
+                      {format(parseISO(date), 'EEEE, MMMM d, yyyy')}
                       <span className="text-sm font-normal text-gray-500">
                         ({dayPhotos.length} photos)
                       </span>
@@ -446,7 +457,7 @@ export function PhotosPage() {
             <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
               <p className="text-sm text-white">
                 Uploaded by {selectedPhoto.attendee?.name || 'Unknown'} • {' '}
-                {format(new Date(selectedPhoto.uploaded_at), 'MMM d, yyyy h:mm a')}
+                {format(parseTimestamp(selectedPhoto.uploaded_at), 'MMM d, yyyy h:mm a')}
               </p>
               {(userType === 'admin' || selectedPhoto.attendee_id === attendeeData?.id) && (
                 <Button
