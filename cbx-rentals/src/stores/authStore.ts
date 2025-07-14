@@ -19,6 +19,10 @@ interface AuthState {
   logout: () => void;
 }
 
+// Hardcoded admin credentials
+const ADMIN_USERNAME = 'cbxadmin';
+const ADMIN_PASSWORD = 'cbx2025';
+
 // Update formatPhoneNumber to include hashing (client-side; move to server for security)
 const formatPhoneNumber = (phone: string) => {
   // Remove non-digits
@@ -37,14 +41,25 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (username: string, password: string) => {
         try {
-          // Admin login (assume username is email for Supabase Auth)
+          // Check hardcoded admin credentials first
+          if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+            set({
+              isAuthenticated: true,
+              username,
+              userType: 'admin',
+              attendeeData: null,
+            });
+            return true;
+          }
+
+          // Try Supabase Auth for other admin users
           const { data, error } = await supabase.auth.signInWithPassword({
             email: username,
             password,
           });
 
           if (error) {
-            console.error('Admin login error:', error);
+            console.error('Supabase auth error:', error);
             // Fallback to attendee login
             const formattedPhone = formatPhoneNumber(password);
             const { data: attendees, error: attendeeError } = await supabase
