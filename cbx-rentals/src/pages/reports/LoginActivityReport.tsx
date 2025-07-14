@@ -75,6 +75,7 @@ export function LoginActivityReport() {
   };
 
   const getDeviceType = (userAgent: string) => {
+    if (!userAgent) return <Monitor className="h-4 w-4" />;
     if (/mobile|android|iphone|ipad/i.test(userAgent)) {
       return <Smartphone className="h-4 w-4" />;
     }
@@ -82,6 +83,7 @@ export function LoginActivityReport() {
   };
 
   const getBrowserInfo = (userAgent: string) => {
+    if (!userAgent) return 'Unknown';
     if (userAgent.includes('Chrome')) return 'Chrome';
     if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) return 'Safari';
     if (userAgent.includes('Firefox')) return 'Firefox';
