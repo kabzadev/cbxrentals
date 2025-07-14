@@ -104,8 +104,8 @@ export function CheckInPage() {
         if (exactMatch) attendee = exactMatch;
       }
 
-      // Set user context for this session
-      setAuthenticatedUserContext(attendee.id, attendee.name);
+      // Set user context for this session (use name as userId for consistency)
+      setAuthenticatedUserContext(attendee.name, 'check-in');
       
       // Track successful check-in start
       trackEvent('Check-In Started', {

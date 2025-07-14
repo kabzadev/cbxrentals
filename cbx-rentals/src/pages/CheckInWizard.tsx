@@ -66,8 +66,8 @@ export function CheckInWizard() {
       // Don't pre-select carpool option even if it has a value in the database
       setInterestedInCarpool(null);
       
-      // Set user context and track wizard start
-      setAuthenticatedUserContext(attendee.id, attendee.name);
+      // Set user context and track wizard start (use name as userId for consistency)
+      setAuthenticatedUserContext(attendee.name, 'check-in-wizard');
       trackEvent('Check-In Wizard Started', {
         attendeeName: attendee.name,
         attendeeId: attendee.id,
