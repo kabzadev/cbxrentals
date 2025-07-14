@@ -35,7 +35,7 @@ jobs:
       - name: Build application
         run: |
           cd cbx-rentals
-          npm run build
+          npx vite build
           
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
