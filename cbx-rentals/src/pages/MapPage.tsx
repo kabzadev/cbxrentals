@@ -3,6 +3,7 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { MapPin, Home, Users } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 
 // House data with coordinates
 type House = {
@@ -175,30 +176,27 @@ export function MapPage() {
             {/* Show house list as fallback */}
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {houses.map((house) => (
-                <Card key={house.id} className="border-2" style={{ borderColor: house.color }}>
+                <Card key={house.id} className="border-2 bg-gray-50" style={{ borderColor: house.color }}>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900">
                       <Home className="h-5 w-5" style={{ color: house.color }} />
                       {house.name}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2">
-                    <p className="text-sm text-gray-600">
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-gray-700">
                       <MapPin className="inline h-4 w-4 mr-1" />
                       {house.address}
                     </p>
-                    {!house.isSpecialLocation && (
-                      <>
-                        <div className="flex gap-4 text-sm">
-                          <span>{house.bedrooms} bedrooms</span>
-                          <span>{house.bathrooms} bathrooms</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Users className="h-4 w-4" />
-                          <span>Max {house.maxOccupancy} guests</span>
-                        </div>
-                      </>
-                    )}
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(house.address)}`, '_blank')}
+                    >
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Get Directions
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -247,16 +245,16 @@ export function MapPage() {
                       <Home className="h-5 w-5" style={{ color: selectedHouse.color }} />
                       {selectedHouse.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-2">{selectedHouse.address}</p>
-                    {!selectedHouse.isSpecialLocation && (
-                      <div className="space-y-1">
-                        <p className="text-sm">{selectedHouse.bedrooms} bedrooms, {selectedHouse.bathrooms} bathrooms</p>
-                        <Badge variant="outline" className="text-xs">
-                          <Users className="h-3 w-3 mr-1" />
-                          Max {selectedHouse.maxOccupancy} guests
-                        </Badge>
-                      </div>
-                    )}
+                    <p className="text-sm text-gray-600 mb-3">{selectedHouse.address}</p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedHouse.address)}`, '_blank')}
+                    >
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Get Directions
+                    </Button>
                   </div>
                 </InfoWindow>
               )}
@@ -264,13 +262,13 @@ export function MapPage() {
           </LoadScript>
 
           {/* House list below map */}
-          <div className="p-6 border-t">
-            <h3 className="text-lg font-semibold mb-4">All Houses</h3>
+          <div className="p-6 border-t bg-gray-50">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900">All Locations</h3>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {houses.map((house) => (
                 <div
                   key={house.id}
-                  className="p-4 border rounded-lg cursor-pointer hover:shadow-md transition-shadow"
+                  className="p-4 bg-white border rounded-lg cursor-pointer hover:shadow-md transition-shadow"
                   style={{ borderColor: house.color, borderWidth: '2px' }}
                   onClick={() => {
                     setSelectedHouse(house);
@@ -278,19 +276,26 @@ export function MapPage() {
                     map?.setZoom(16);
                   }}
                 >
-                  <h4 className="font-semibold flex items-center gap-2">
+                  <h4 className="font-semibold flex items-center gap-2 text-gray-900">
                     <div 
                       className="w-4 h-4 rounded-full" 
                       style={{ backgroundColor: house.color }}
                     />
                     {house.name}
                   </h4>
-                  <p className="text-sm text-gray-600 mt-1">{house.address}</p>
-                  {!house.isSpecialLocation && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      {house.bedrooms}BR / {house.bathrooms}BA • Max {house.maxOccupancy}
-                    </p>
-                  )}
+                  <p className="text-sm text-gray-700 mt-1">{house.address}</p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full mt-3"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(house.address)}`, '_blank');
+                    }}
+                  >
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Get Directions
+                  </Button>
                 </div>
               ))}
             </div>
