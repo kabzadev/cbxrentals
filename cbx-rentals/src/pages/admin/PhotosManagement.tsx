@@ -48,14 +48,44 @@ export function PhotosManagement() {
     try {
       const { data, error } = await supabase
         .from('photos')
-        .select(`
-          *,
-          attendee:attendees(name)
-        `)
+        .select('*, attendee_id')
         .order('uploaded_at', { ascending: false });
 
-      if (error) throw error;
-      setPhotos(data || []);
+      if (error) {
+        // Check if the error is because the table doesn't exist
+        if (error.code === 'PGRST200' || error.message?.includes('relationship')) {
+          console.log('Photos table may not exist yet. Please run the migration.');
+          setPhotos([]);
+          setLoading(false);
+          return;
+        }
+        throw error;
+      }
+      
+      // If we have data, manually join with attendees
+      if (data && data.length > 0) {
+        const attendeeIds = [...new Set(data.map(photo => photo.attendee_id).filter(Boolean))];
+        
+        if (attendeeIds.length > 0) {
+          const { data: attendees } = await supabase
+            .from('attendees')
+            .select('id, name')
+            .in('id', attendeeIds);
+          
+          const attendeeMap = new Map(attendees?.map(a => [a.id, a]) || []);
+          
+          const photosWithAttendees = data.map(photo => ({
+            ...photo,
+            attendee: photo.attendee_id ? attendeeMap.get(photo.attendee_id) : null
+          }));
+          
+          setPhotos(photosWithAttendees);
+        } else {
+          setPhotos(data);
+        }
+      } else {
+        setPhotos([]);
+      }
     } catch (error) {
       console.error('Error loading photos:', error);
       toast({

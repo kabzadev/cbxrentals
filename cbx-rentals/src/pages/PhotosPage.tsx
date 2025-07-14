@@ -27,6 +27,7 @@ export function PhotosPage() {
   const [uploading, setUploading] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [tableExists, setTableExists] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const carouselInterval = useRef<NodeJS.Timeout>();
@@ -59,14 +60,45 @@ export function PhotosPage() {
     try {
       const { data, error } = await supabase
         .from('photos')
-        .select(`
-          *,
-          attendee:attendees(name)
-        `)
+        .select('*, attendee_id')
         .order('uploaded_at', { ascending: false });
 
-      if (error) throw error;
-      setPhotos(data || []);
+      if (error) {
+        // Check if the error is because the table doesn't exist
+        if (error.code === 'PGRST200' || error.message?.includes('relationship') || error.code === '42P01') {
+          console.log('Photos table may not exist yet. Please run the migration.');
+          setTableExists(false);
+          setPhotos([]);
+          setLoading(false);
+          return;
+        }
+        throw error;
+      }
+      
+      // If we have data, manually join with attendees
+      if (data && data.length > 0) {
+        const attendeeIds = [...new Set(data.map(photo => photo.attendee_id).filter(Boolean))];
+        
+        if (attendeeIds.length > 0) {
+          const { data: attendees } = await supabase
+            .from('attendees')
+            .select('id, name')
+            .in('id', attendeeIds);
+          
+          const attendeeMap = new Map(attendees?.map(a => [a.id, a]) || []);
+          
+          const photosWithAttendees = data.map(photo => ({
+            ...photo,
+            attendee: photo.attendee_id ? attendeeMap.get(photo.attendee_id) : null
+          }));
+          
+          setPhotos(photosWithAttendees);
+        } else {
+          setPhotos(data);
+        }
+      } else {
+        setPhotos([]);
+      }
     } catch (error) {
       console.error('Error loading photos:', error);
       toast({
@@ -187,35 +219,49 @@ export function PhotosPage() {
       {/* Header with Upload Button */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Event Photos</h1>
-        <div className="flex gap-2">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-          <Button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            <Camera className="w-4 h-4 mr-2" />
-            Take Photo
-          </Button>
-          <Button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            variant="outline"
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            Upload Photo
-          </Button>
-        </div>
+        {tableExists && (
+          <div className="flex gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Camera className="w-4 h-4 mr-2" />
+              Take Photo
+            </Button>
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              variant="outline"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Upload Photo
+            </Button>
+          </div>
+        )}
       </div>
+      
+      {!tableExists && (
+        <Card className="bg-yellow-50 border-yellow-200">
+          <CardContent className="p-6">
+            <p className="text-yellow-800 font-medium mb-2">Photos feature setup required</p>
+            <p className="text-yellow-700 text-sm">
+              The photos table needs to be created in your database. Please run the SQL migration 
+              found in <code className="bg-yellow-100 px-1 py-0.5 rounded text-xs">create_photos_table.sql</code> in your Supabase SQL Editor.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
-      {photos.length === 0 ? (
+      {tableExists && photos.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
             <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -229,7 +275,7 @@ export function PhotosPage() {
             </Button>
           </CardContent>
         </Card>
-      ) : (
+      ) : tableExists && (
         <>
           {/* Photo Carousel */}
           <Card className="overflow-hidden">
