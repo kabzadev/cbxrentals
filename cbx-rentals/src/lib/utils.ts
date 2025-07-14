@@ -42,3 +42,19 @@ export function calculateNights(arrivalDate: Date, exitDate: Date): number {
   )
   return diffDays
 }
+
+/**
+ * Format phone number for display
+ */
+export function formatPhoneNumber(phone: string): string {
+  // Remove all non-digit characters
+  const cleaned = phone.replace(/\D/g, '')
+  
+  // Format as (XXX) XXX-XXXX if US phone number
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`
+  }
+  
+  // Return original if not a standard US phone number
+  return phone
+}
