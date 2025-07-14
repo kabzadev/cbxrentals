@@ -116,19 +116,21 @@ export function PhotosPage() {
     if (!file) return;
 
     setUploading(true);
+    let uploadResult: any = null;
+    
     try {
       // Upload to Azure
-      const result = await uploadPhotoToAzure(file, attendeeData?.name || username || 'Unknown');
+      uploadResult = await uploadPhotoToAzure(file, attendeeData?.name || username || 'Unknown');
 
-      if (!result.success || !result.url) {
-        throw new Error(result.error || 'Upload failed');
+      if (!uploadResult.success || !uploadResult.url) {
+        throw new Error(uploadResult.error || 'Upload failed');
       }
 
       // Save to database
       const { error: dbError } = await supabase
         .from('photos')
         .insert({
-          url: result.url,
+          url: uploadResult.url,
           filename: file.name,
           attendee_id: attendeeData?.id || null,
         });
@@ -155,9 +157,13 @@ export function PhotosPage() {
         context: 'photo_upload',
         uploader: attendeeData?.name || username,
       });
+      
+      const errorMessage = uploadResult?.error || 
+                          (error instanceof Error ? error.message : 'Failed to upload photo');
+      
       toast({
         title: 'Error',
-        description: result.error || 'Failed to upload photo',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {

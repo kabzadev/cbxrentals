@@ -1,6 +1,6 @@
 import { trackEvent, trackException, trackMetric } from './appInsights';
 
-const STORAGE_URL = import.meta.env.VITE_AZURE_STORAGE_SAS_URL ? decodeURIComponent(import.meta.env.VITE_AZURE_STORAGE_SAS_URL) : undefined;
+const STORAGE_URL = import.meta.env.VITE_AZURE_STORAGE_SAS_URL;
 
 export interface UploadResult {
   success: boolean;
@@ -17,7 +17,8 @@ export const uploadPhotoToAzure = async (
   try {
     // Check if storage URL is configured
     if (!STORAGE_URL) {
-      throw new Error('Azure Storage is not configured. Please set VITE_AZURE_STORAGE_SAS_URL in your environment variables.');
+      console.log('Azure Storage URL not found. Env vars:', Object.keys(import.meta.env));
+      throw new Error('Azure Storage is not configured. Please check your environment variables.');
     }
     
     // Validate file

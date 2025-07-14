@@ -39,6 +39,10 @@ jobs:
           VITE_AUTH_USERNAME: ${{ secrets.VITE_AUTH_USERNAME }}
           VITE_AUTH_PASSWORD: ${{ secrets.VITE_AUTH_PASSWORD }}
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_AZURE_STORAGE_ACCOUNT: ${{ secrets.VITE_AZURE_STORAGE_ACCOUNT }}
+          VITE_AZURE_STORAGE_CONTAINER: ${{ secrets.VITE_AZURE_STORAGE_CONTAINER }}
+          VITE_AZURE_STORAGE_SAS_URL: ${{ secrets.VITE_AZURE_STORAGE_SAS_URL }}
+          VITE_APP_INSIGHTS_CONNECTION_STRING: ${{ secrets.VITE_APP_INSIGHTS_CONNECTION_STRING }}
         run: |
           cd cbx-rentals
           npx vite build
