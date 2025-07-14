@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera, Activity, LogIn } from 'lucide-react';
+import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera, Activity, LogIn, CalendarCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useState } from 'react';
@@ -124,6 +124,13 @@ export function Navigation() {
                     >
                       <Activity className="w-4 h-4 mr-2" />
                       Check-In Activity
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/reports/event-attendance')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <CalendarCheck className="w-4 h-4 mr-2" />
+                      Event Attendance
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -254,6 +261,51 @@ export function Navigation() {
                   <div className="flex items-center">
                     <UserPlus className="w-4 h-4 mr-2" />
                     Ride Share Requests
+                  </div>
+                </Link>
+                <Link
+                  to="/reports/login-activity"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/reports/login-activity'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Login Activity
+                  </div>
+                </Link>
+                <Link
+                  to="/reports/checkin-activity"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/reports/checkin-activity'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <Activity className="w-4 h-4 mr-2" />
+                    Check-In Activity
+                  </div>
+                </Link>
+                <Link
+                  to="/reports/event-attendance"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/reports/event-attendance'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <CalendarCheck className="w-4 h-4 mr-2" />
+                    Event Attendance
                   </div>
                 </Link>
                 
