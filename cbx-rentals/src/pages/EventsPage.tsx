@@ -212,14 +212,23 @@ export function EventsPage() {
       if (editingEvent) {
         console.log('Updating event:', editingEvent.id, 'with payload:', eventPayload);
         
-        // Update existing event and get the updated data back
-        const { data: updatedEvent, error } = await supabase
+        // Update existing event - first just do the update
+        const { error: updateError } = await supabase
           .from('events')
           .update({
             ...eventPayload,
             updated_at: new Date().toISOString()
           })
-          .eq('id', editingEvent.id)
+          .eq('id', editingEvent.id);
+
+        if (updateError) {
+          console.error('Update error:', updateError);
+          throw updateError;
+        }
+
+        // Then fetch the updated event separately
+        const { data: updatedEvent, error: fetchError } = await supabase
+          .from('events')
           .select(`
             *,
             event_attendees (
@@ -228,9 +237,13 @@ export function EventsPage() {
               is_interested
             )
           `)
+          .eq('id', editingEvent.id)
           .single();
 
-        if (error) throw error;
+        if (fetchError) {
+          console.error('Fetch error:', fetchError);
+          // Don't throw here, the update might have succeeded even if fetch failed
+        }
         
         console.log('Update response:', updatedEvent);
         
@@ -246,28 +259,20 @@ export function EventsPage() {
         } else {
           console.warn('No updated event data returned from Supabase');
           
-          // If no data returned, try to fetch the updated event separately
-          const { data: refetchedEvent, error: refetchError } = await supabase
-            .from('events')
-            .select(`
-              *,
-              event_attendees (
-                id,
-                attendee_id,
-                is_interested
-              )
-            `)
-            .eq('id', editingEvent.id)
-            .single();
-            
-          if (!refetchError && refetchedEvent) {
-            console.log('Refetched event:', refetchedEvent);
-            setEvents(prevEvents => 
-              prevEvents.map(event => 
-                event.id === editingEvent.id ? refetchedEvent : event
-              )
-            );
-          }
+          // Update succeeded but we couldn't fetch the data
+          // Update with the form data we have
+          const updatedEventLocal = {
+            ...editingEvent,
+            ...eventPayload,
+            updated_at: new Date().toISOString()
+          };
+          
+          console.log('Using local update:', updatedEventLocal);
+          setEvents(prevEvents => 
+            prevEvents.map(event => 
+              event.id === editingEvent.id ? updatedEventLocal : event
+            )
+          );
         }
         
         toast({
@@ -326,7 +331,9 @@ export function EventsPage() {
       trackException(error as Error, {
         context: 'save_event',
         action: editingEvent ? 'update' : 'create',
-        eventData: eventPayload
+        eventData: eventData,
+        errorCode: error?.code,
+        errorDetails: error?.details
       });
     }
   };
