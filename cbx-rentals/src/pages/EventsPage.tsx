@@ -239,6 +239,7 @@ export function EventsPage() {
 
       if (attendeesError) {
         console.error('Error deleting event attendees:', attendeesError);
+        // Continue anyway - the event might not have attendees
       }
 
       // Then delete the event
@@ -251,18 +252,33 @@ export function EventsPage() {
         console.error('Delete error details:', error);
         
         // Check if it's an RLS policy error
-        if (error.message?.includes('policy') || error.code === '42501') {
-          throw new Error('Permission denied. Database policies need to be updated to allow deletion.');
+        if (error.message?.includes('policy') || error.code === '42501' || error.code === 'PGRST301') {
+          toast({
+            title: 'Database Configuration Issue',
+            description: 'Event deletion is blocked by database security policies. Please contact your administrator to enable DELETE policies for the events table.',
+            variant: 'destructive',
+          });
+          return;
         }
         throw error;
       }
+
+      // Immediately remove the event from state for better UX
+      setEvents(prevEvents => prevEvents.filter(e => e.id !== eventId));
+      
+      // Also remove from event interests
+      setEventInterests(prev => {
+        const newInterests = { ...prev };
+        delete newInterests[eventId];
+        return newInterests;
+      });
 
       toast({
         title: 'Success',
         description: 'Event deleted successfully',
       });
 
-      // Refresh events from database
+      // Then refresh from database to ensure consistency
       const { data: eventsData } = await supabase
         .from('events')
         .select(`
