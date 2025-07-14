@@ -324,23 +324,17 @@ export function EventAttendanceReport() {
                           )}
                         </td>
                         <td className="py-3">
-                          <div className="flex gap-2">
-                            {attendee.has_rental_car && (
-                              <Badge variant="secondary" className="gap-1">
-                                <Car className="h-3 w-3" />
-                                Car
-                              </Badge>
-                            )}
-                            {attendee.needs_airport_pickup && (
-                              <Badge variant="secondary" className="gap-1">
-                                <Plane className="h-3 w-3" />
-                                Pickup
-                              </Badge>
-                            )}
-                            {!attendee.has_rental_car && !attendee.needs_airport_pickup && (
-                              <span className="text-gray-400">-</span>
-                            )}
-                          </div>
+                          {attendee.has_rental_car ? (
+                            <Badge variant="secondary" className="gap-1">
+                              <Car className="h-3 w-3" />
+                              Has Vehicle
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="gap-1">
+                              <Users className="h-3 w-3" />
+                              Needs Ride
+                            </Badge>
+                          )}
                         </td>
                         <td className="py-3">
                           {attendee.checked_in ? (
