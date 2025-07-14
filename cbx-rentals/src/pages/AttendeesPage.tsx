@@ -3,7 +3,7 @@ import { useAuthStore } from '../stores/authStore';
 import { Button } from '../components/ui/button';
 import { AttendeeList } from '../components/attendees';
 import { useNavigate } from 'react-router-dom';
-import { LogOutIcon, ArrowLeft, Plus, X } from 'lucide-react';
+import { ArrowLeft, Plus, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -11,7 +11,7 @@ import { useToast } from '../components/ui/use-toast';
 import { supabase } from '../lib/supabase';
 
 export function AttendeesPage() {
-  const { username, logout, userType } = useAuthStore();
+  const { username, userType } = useAuthStore();
   const navigate = useNavigate();
   const isAdmin = userType === 'admin';
   const { toast } = useToast();
@@ -20,11 +20,6 @@ export function AttendeesPage() {
   const [newAttendee, setNewAttendee] = useState({ name: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   const formatPhoneNumber = (phone: string) => {
     // Remove all non-numeric characters
@@ -129,15 +124,6 @@ export function AttendeesPage() {
                 <ArrowLeft className="h-4 w-4" />
                 <span>Back</span>
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                className="flex items-center gap-1"
-              >
-                <LogOutIcon className="h-4 w-4" />
-                <span>Logout</span>
-              </Button>
             </div>
           </div>
           
@@ -157,15 +143,6 @@ export function AttendeesPage() {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">Welcome, {username}</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                className="flex items-center gap-2"
-              >
-                <LogOutIcon className="h-4 w-4" />
-                Logout
-              </Button>
             </div>
           </div>
         </div>
