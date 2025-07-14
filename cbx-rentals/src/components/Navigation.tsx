@@ -22,9 +22,6 @@ export function Navigation() {
     navigate('/login');
   };
 
-  // Check if user is Keith Kabza
-  const isKeith = username === 'Keith Kabza' || attendeeData?.name === 'Keith Kabza';
-
   const navItems = [
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/events', label: 'Events', icon: CalendarIcon },
@@ -35,10 +32,6 @@ export function Navigation() {
   ].filter(item => {
     // Hide Guest Check-In for admin and attendee users
     if (item.path === '/check-in' && (userType === 'admin' || userType === 'attendee')) {
-      return false;
-    }
-    // Only show Photos to Keith Kabza
-    if (item.path === '/photos' && !isKeith) {
       return false;
     }
     return true;

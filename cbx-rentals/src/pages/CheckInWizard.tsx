@@ -33,7 +33,7 @@ export function CheckInWizard() {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { loginAttendee } = useAuthStore();
+  const { loginAttendee, logout } = useAuthStore();
   const [currentStep, setCurrentStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isEditingDates, setIsEditingDates] = useState(false);
@@ -555,7 +555,10 @@ export function CheckInWizard() {
                 <div className="flex gap-4">
                   <Button 
                     variant="outline" 
-                    onClick={() => navigate('/check-in')}
+                    onClick={() => {
+                      logout();
+                      navigate('/login');
+                    }}
                     className="flex-1 bg-white border-2 border-gray-400 text-gray-900 hover:bg-gray-50 hover:text-black hover:border-gray-600 font-semibold"
                   >
                     Cancel

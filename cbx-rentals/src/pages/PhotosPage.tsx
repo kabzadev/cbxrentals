@@ -1,13 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Camera, Upload, ChevronLeft, ChevronRight, Calendar, X } from 'lucide-react';
+import { Camera, Upload, ChevronLeft, ChevronRight, Calendar, X, Trash2 } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { supabase } from '../lib/supabase';
 import { uploadPhotoToAzure } from '../lib/azureStorage';
 import { useToast } from '../components/ui/use-toast';
 import { format } from 'date-fns';
 import { trackEvent, trackException } from '../lib/appInsights';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../components/ui/alert-dialog';
 
 interface Photo {
   id: string;
@@ -15,31 +25,29 @@ interface Photo {
   filename: string;
   caption?: string;
   uploaded_at: string;
+  attendee_id?: string;
   attendee?: {
+    id: string;
     name: string;
   };
 }
 
 export function PhotosPage() {
-  const { username, attendeeData } = useAuthStore();
+  const { username, attendeeData, userType } = useAuthStore();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [tableExists, setTableExists] = useState(true);
+  const [photoToDelete, setPhotoToDelete] = useState<Photo | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const carouselInterval = useRef<NodeJS.Timeout>();
 
-  // Check if user is Keith Kabza
-  const isKeith = username === 'Keith Kabza' || attendeeData?.name === 'Keith Kabza';
-
   useEffect(() => {
-    if (isKeith) {
-      loadPhotos();
-    }
-  }, [isKeith]);
+    loadPhotos();
+  }, []);
 
   useEffect(() => {
     // Auto-advance carousel
@@ -85,7 +93,7 @@ export function PhotosPage() {
             .select('id, name')
             .in('id', attendeeIds);
           
-          const attendeeMap = new Map(attendees?.map(a => [a.id, a]) || []);
+          const attendeeMap = new Map(attendees?.map(a => [a.id, { id: a.id, name: a.name }]) || []);
           
           const photosWithAttendees = data.map(photo => ({
             ...photo,
@@ -176,6 +184,39 @@ export function PhotosPage() {
     }
   };
 
+  const handleDeletePhoto = async (photo: Photo) => {
+    try {
+      const { error } = await supabase
+        .from('photos')
+        .delete()
+        .eq('id', photo.id);
+
+      if (error) throw error;
+
+      // Track deletion
+      trackEvent('Photo Deleted', {
+        filename: photo.filename,
+        deleter: attendeeData?.name || username,
+      });
+
+      toast({
+        title: 'Success',
+        description: 'Photo deleted successfully',
+      });
+
+      // Reload photos
+      await loadPhotos();
+      setPhotoToDelete(null);
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete photo',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const groupPhotosByDay = () => {
     const groups: Record<string, Photo[]> = {};
     photos.forEach(photo => {
@@ -196,18 +237,6 @@ export function PhotosPage() {
     setCarouselIndex((prev) => (prev + 1) % photos.length);
   };
 
-  if (!isKeith) {
-    return (
-      <div className="p-6">
-        <Card>
-          <CardContent className="p-6 text-center">
-            <p className="text-gray-600">You don't have permission to view this page.</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
       <div className="p-6">
@@ -225,8 +254,8 @@ export function PhotosPage() {
   return (
     <div className="p-6 space-y-6">
       {/* Header with Upload Button */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Event Photos</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Event Photos</h1>
         {tableExists && (
           <div className="flex gap-2">
             {/* Camera input - for taking photos */}
@@ -250,18 +279,21 @@ export function PhotosPage() {
             <Button
               onClick={() => document.getElementById('camera-input')?.click()}
               disabled={uploading}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 text-sm sm:text-base"
+              size="sm"
             >
-              <Camera className="w-4 h-4 mr-2" />
-              Take Photo
+              <Camera className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Take Photo</span>
             </Button>
             <Button
               onClick={() => document.getElementById('gallery-input')?.click()}
               disabled={uploading}
               variant="outline"
+              size="sm"
+              className="text-sm sm:text-base"
             >
-              <Upload className="w-4 h-4 mr-2" />
-              Choose Photo
+              <Upload className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Choose Photo</span>
             </Button>
           </div>
         )}
@@ -411,15 +443,51 @@ export function PhotosPage() {
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="absolute bottom-4 left-4 right-4 text-white">
-              <p className="text-sm">
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+              <p className="text-sm text-white">
                 Uploaded by {selectedPhoto.attendee?.name || 'Unknown'} • {' '}
                 {format(new Date(selectedPhoto.uploaded_at), 'MMM d, yyyy h:mm a')}
               </p>
+              {(userType === 'admin' || selectedPhoto.attendee_id === attendeeData?.id) && (
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPhotoToDelete(selectedPhoto);
+                    setSelectedPhoto(null);
+                  }}
+                  variant="destructive"
+                  size="sm"
+                  className="ml-4"
+                >
+                  <Trash2 className="w-4 h-4 mr-1" />
+                  Delete
+                </Button>
+              )}
             </div>
           </div>
         </div>
       )}
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={!!photoToDelete} onOpenChange={() => setPhotoToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Photo</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this photo? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => photoToDelete && handleDeletePhoto(photoToDelete)}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
