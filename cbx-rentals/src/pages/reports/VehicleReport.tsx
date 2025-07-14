@@ -18,8 +18,8 @@ interface AttendeeWithVehicle {
       name: string;
       address: string;
     } | null;
-    check_in: string;
-    check_out: string;
+    arrival_date: string;
+    exit_date: string;
   }[];
 }
 
@@ -33,7 +33,6 @@ export function VehicleReport() {
 
   const loadAttendees = async () => {
     try {
-      console.log('Loading attendees with vehicles...');
       const { data, error } = await supabase
         .from('attendees')
         .select(`
@@ -44,8 +43,8 @@ export function VehicleReport() {
           has_rental_car,
           bookings (
             id,
-            check_in,
-            check_out,
+            arrival_date,
+            exit_date,
             property:properties (
               id,
               name,
@@ -56,7 +55,6 @@ export function VehicleReport() {
         .eq('has_rental_car', true)
         .order('name');
 
-      console.log('Query result:', { data, error });
       if (error) throw error;
       setAttendees(data || []);
     } catch (error) {
@@ -141,7 +139,7 @@ export function VehicleReport() {
                             <div className="flex items-center gap-2 text-gray-600">
                               <Calendar className="w-3 h-3 text-gray-400" />
                               <span>
-                                {new Date(booking.check_in).toLocaleDateString()} - {new Date(booking.check_out).toLocaleDateString()}
+                                {new Date(booking.arrival_date).toLocaleDateString()} - {new Date(booking.exit_date).toLocaleDateString()}
                               </span>
                             </div>
                           </div>
