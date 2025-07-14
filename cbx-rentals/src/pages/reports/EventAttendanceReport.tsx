@@ -294,33 +294,36 @@ export function EventAttendanceReport() {
                 <table className="w-full">
                   <thead className="border-b">
                     <tr className="text-left">
-                      <th className="pb-3 font-medium">Name</th>
-                      <th className="pb-3 font-medium">Phone</th>
-                      <th className="pb-3 font-medium">House</th>
-                      <th className="pb-3 font-medium">Transportation</th>
-                      <th className="pb-3 font-medium">Status</th>
+                      <th className="pb-3 font-medium text-gray-700">Name</th>
+                      <th className="pb-3 font-medium text-gray-700">Phone</th>
+                      <th className="pb-3 font-medium text-gray-700">House</th>
+                      <th className="pb-3 font-medium text-gray-700">Transportation</th>
+                      <th className="pb-3 font-medium text-gray-700">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {attendees.map((attendee) => (
-                      <tr key={attendee.id} className="hover:bg-gray-50">
+                      <tr key={attendee.id} className="hover:bg-gray-50 transition-colors">
                         <td className="py-3">
                           <div className="flex items-center gap-2">
                             <User className="h-4 w-4 text-gray-400" />
-                            <span className="font-medium">{attendee.name}</span>
+                            <span className="font-medium text-gray-900">{attendee.name}</span>
                           </div>
                         </td>
                         <td className="py-3">
-                          <div className="flex items-center gap-2">
-                            <Phone className="h-4 w-4 text-gray-400" />
-                            <span className="text-sm">{formatPhoneNumber(attendee.phone)}</span>
-                          </div>
+                          <a 
+                            href={`tel:${attendee.phone}`}
+                            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                          >
+                            <Phone className="h-4 w-4" />
+                            <span className="text-sm font-medium">{formatPhoneNumber(attendee.phone)}</span>
+                          </a>
                         </td>
                         <td className="py-3">
                           {attendee.property_name ? (
                             <Badge variant="outline">{attendee.property_name}</Badge>
                           ) : (
-                            <span className="text-gray-400">-</span>
+                            <span className="text-gray-500">-</span>
                           )}
                         </td>
                         <td className="py-3">
