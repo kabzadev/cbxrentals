@@ -11,6 +11,8 @@ import { MapPage } from './pages/MapPage'
 import { VehicleReport } from './pages/reports/VehicleReport'
 import { RideShareReport } from './pages/reports/RideShareReport'
 import { UpdateRentalCars } from './pages/admin/UpdateRentalCars'
+import { PhotosPage } from './pages/PhotosPage'
+import { PhotosManagement } from './pages/admin/PhotosManagement'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Layout } from './components/Layout'
 import { Toaster } from './components/ui/toaster'
@@ -34,10 +36,12 @@ function App() {
               <Route path="/attendees/:id" element={<AttendeeDetailsPage />} />
               <Route path="/properties/:id" element={<PropertyDetailsPage />} />
               <Route path="/map" element={<MapPage />} />
+              <Route path="/photos" element={<PhotosPage />} />
               <Route path="/reports/vehicles" element={<VehicleReport />} />
               <Route path="/reports/rental-cars" element={<Navigate to="/reports/vehicles" replace />} />
               <Route path="/reports/ride-share" element={<RideShareReport />} />
               <Route path="/admin/update-rental-cars" element={<UpdateRentalCars />} />
+              <Route path="/admin/photos" element={<PhotosManagement />} />
             </Route>
           </Route>
         </Routes>

@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus } from 'lucide-react';
+import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useState } from 'react';
@@ -14,7 +14,7 @@ import {
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, username, userType } = useAuthStore();
+  const { logout, username, userType, attendeeData } = useAuthStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -22,15 +22,23 @@ export function Navigation() {
     navigate('/login');
   };
 
+  // Check if user is Keith Kabza
+  const isKeith = username === 'Keith Kabza' || attendeeData?.name === 'Keith Kabza';
+
   const navItems = [
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/events', label: 'Events', icon: CalendarIcon },
     { path: '/attendees', label: 'Attendees', icon: Users },
     { path: '/map', label: 'Map', icon: MapPin },
     { path: '/check-in', label: 'Guest Check-In', icon: UserCheck },
+    { path: '/photos', label: 'Photos', icon: Camera },
   ].filter(item => {
     // Hide Guest Check-In for admin and attendee users
     if (item.path === '/check-in' && (userType === 'admin' || userType === 'attendee')) {
+      return false;
+    }
+    // Only show Photos to Keith Kabza
+    if (item.path === '/photos' && !isKeith) {
       return false;
     }
     return true;
@@ -102,6 +110,34 @@ export function Navigation() {
                     >
                       <UserPlus className="w-4 h-4 mr-2" />
                       Ride Share Requests
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+              
+              {/* Admin Menu - Only for admin */}
+              {userType === 'admin' && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className={cn(
+                        "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                        location.pathname.startsWith('/admin')
+                          ? "border-[#e50914] text-white"
+                          : "border-transparent text-gray-400 hover:border-gray-600 hover:text-gray-200"
+                      )}
+                    >
+                      Admin
+                      <ChevronDown className="w-3 h-3 ml-1" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-[#303030] border-[#505050]">
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/admin/photos')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <Camera className="w-4 h-4 mr-2" />
+                      Manage Photos
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -204,6 +240,28 @@ export function Navigation() {
                   <div className="flex items-center">
                     <UserPlus className="w-4 h-4 mr-2" />
                     Ride Share Requests
+                  </div>
+                </Link>
+                
+                {/* Admin Section */}
+                <div className="pl-3 pr-4 py-2 text-sm font-medium text-gray-400 mt-2">
+                  <div className="flex items-center">
+                    Admin
+                  </div>
+                </div>
+                <Link
+                  to="/admin/photos"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/admin/photos'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <Camera className="w-4 h-4 mr-2" />
+                    Manage Photos
                   </div>
                 </Link>
               </>
