@@ -14,11 +14,13 @@ import { UpdateRentalCars } from './pages/admin/UpdateRentalCars'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Layout } from './components/Layout'
 import { Toaster } from './components/ui/toaster'
+import { RedirectOldUrls } from './components/RedirectOldUrls'
 
 function App() {
   return (
     <>
       <Router>
+        <RedirectOldUrls />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/check-in" element={<CheckInPage />} />
@@ -32,7 +34,8 @@ function App() {
               <Route path="/attendees/:id" element={<AttendeeDetailsPage />} />
               <Route path="/properties/:id" element={<PropertyDetailsPage />} />
               <Route path="/map" element={<MapPage />} />
-              <Route path="/reports/rental-cars" element={<VehicleReport />} />
+              <Route path="/reports/vehicles" element={<VehicleReport />} />
+              <Route path="/reports/rental-cars" element={<Navigate to="/reports/vehicles" replace />} />
               <Route path="/reports/ride-share" element={<RideShareReport />} />
               <Route path="/admin/update-rental-cars" element={<UpdateRentalCars />} />
             </Route>

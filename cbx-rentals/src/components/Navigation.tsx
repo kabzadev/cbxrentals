@@ -90,7 +90,7 @@ export function Navigation() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-[#303030] border-[#505050]">
                     <DropdownMenuItem 
-                      onClick={() => navigate('/reports/rental-cars')}
+                      onClick={() => navigate('/reports/vehicles')}
                       className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
                     >
                       <Car className="w-4 h-4 mr-2" />
@@ -177,11 +177,11 @@ export function Navigation() {
                   </div>
                 </div>
                 <Link
-                  to="/reports/rental-cars"
+                  to="/reports/vehicles"
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
                     "block pl-8 pr-4 py-2 text-base font-medium",
-                    location.pathname === '/reports/rental-cars'
+                    location.pathname === '/reports/vehicles'
                       ? "bg-black text-white"
                       : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
                   )}
