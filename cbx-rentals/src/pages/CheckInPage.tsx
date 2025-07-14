@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '../components/ui/use-toast';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../stores/authStore';
+import { trackEvent, setAuthenticatedUserContext } from '../lib/appInsights';
 
 const checkInSchema = z.object({
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -55,6 +56,13 @@ export function CheckInPage() {
     setIsLoading(true);
     
     try {
+      // Track check-in attempt
+      trackEvent('Check-In Attempt', {
+        lastName: values.lastName,
+        phoneLastFour: values.phone.slice(-4), // Only last 4 digits for privacy
+        source: 'check_in_page'
+      });
+
       // Clean phone number for database lookup (remove all non-digits)
       const cleanedPhone = cleanPhoneNumber(values.phone);
       
@@ -74,6 +82,11 @@ export function CheckInPage() {
       if (error) throw error;
 
       if (!attendees || attendees.length === 0) {
+        trackEvent('Check-In Failed', {
+          reason: 'not_found',
+          lastName: values.lastName,
+          phoneLastFour: values.phone.slice(-4)
+        });
         toast({
           title: 'Not Found',
           description: 'No booking found with that last name and phone number. Please check your information.',
@@ -90,6 +103,19 @@ export function CheckInPage() {
         );
         if (exactMatch) attendee = exactMatch;
       }
+
+      // Set user context for this session
+      setAuthenticatedUserContext(attendee.id, attendee.name);
+      
+      // Track successful check-in start
+      trackEvent('Check-In Started', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        lastName: values.lastName,
+        phoneLastFour: values.phone.slice(-4),
+        hasBooking: !!attendee.bookings?.[0],
+        propertyName: attendee.bookings?.[0]?.property?.name
+      });
 
       // Navigate to wizard with attendee data
       navigate('/check-in/wizard', { 

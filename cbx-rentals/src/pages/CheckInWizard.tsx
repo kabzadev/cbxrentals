@@ -13,7 +13,7 @@ import { formatCurrency } from '../lib/utils';
 import { supabase } from '../lib/supabase';
 import { PropertyImages } from '../components/properties/PropertyImages';
 import { useAuthStore } from '../stores/authStore';
-import { trackEvent, trackException } from '../lib/appInsights';
+import { trackEvent, trackException, setAuthenticatedUserContext } from '../lib/appInsights';
 
 interface WizardStep {
   id: number;
@@ -65,6 +65,16 @@ export function CheckInWizard() {
       setHasRentalCar(attendee.has_rental_car ?? null);
       // Don't pre-select carpool option even if it has a value in the database
       setInterestedInCarpool(null);
+      
+      // Set user context and track wizard start
+      setAuthenticatedUserContext(attendee.id, attendee.name);
+      trackEvent('Check-In Wizard Started', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        propertyName: property?.name,
+        isPaid: isPaid,
+        totalAmount: booking?.total_amount
+      });
     }
   }, [booking, attendee]);
 
@@ -90,11 +100,28 @@ export function CheckInWizard() {
         booking.arrival_date = arrivalDate;
         booking.exit_date = exitDate;
 
+        trackEvent('Check-In Dates Changed', {
+          attendeeName: attendee.name,
+          attendeeId: attendee.id,
+          oldArrival: booking.arrival_date,
+          newArrival: arrivalDate,
+          oldExit: booking.exit_date,
+          newExit: exitDate,
+          reason: dateChangeReason
+        });
+
         toast({
           title: 'Dates Updated',
           description: 'Your new dates have been saved.',
         });
       } else {
+        trackEvent('Check-In Dates Confirmed', {
+          attendeeName: attendee.name,
+          attendeeId: attendee.id,
+          arrivalDate,
+          exitDate
+        });
+
         toast({
           title: 'Dates Confirmed',
           description: 'Your dates have been confirmed.',
@@ -146,6 +173,14 @@ export function CheckInWizard() {
 
       if (error) throw error;
 
+      trackEvent('Check-In Arrival Details', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        arrivalTime,
+        hasRentalCar,
+        interestedInCarpool
+      });
+
       toast({
         title: 'Arrival Details Saved',
         description: 'Your transportation preferences have been updated.',
@@ -154,6 +189,11 @@ export function CheckInWizard() {
       handleNext();
     } catch (error) {
       console.error('Arrival details error:', error);
+      trackException(error as Error, {
+        context: 'arrival_details_save',
+        attendeeName: attendee.name,
+        attendeeId: attendee.id
+      });
       toast({
         title: 'Error',
         description: 'Failed to save arrival details. Please try again.',
@@ -166,13 +206,29 @@ export function CheckInWizard() {
 
   const handleNext = () => {
     if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      trackEvent('Check-In Wizard Step', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        fromStep: steps[currentStep - 1].title,
+        toStep: steps[nextStep - 1].title,
+        direction: 'forward'
+      });
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      const prevStep = currentStep - 1;
+      setCurrentStep(prevStep);
+      trackEvent('Check-In Wizard Step', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        fromStep: steps[currentStep - 1].title,
+        toStep: steps[prevStep - 1].title,
+        direction: 'backward'
+      });
     }
   };
 
