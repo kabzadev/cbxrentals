@@ -95,8 +95,7 @@ export function AttendeeList() {
       const { error } = await supabase
         .from('attendees')
         .update({ 
-          checked_in: newStatus,
-          check_in_time: newStatus ? new Date().toISOString() : null
+          checked_in: newStatus
         })
         .eq('id', attendeeId)
 
