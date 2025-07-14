@@ -290,56 +290,86 @@ export function EventAttendanceReport() {
                 No attendees {selectedEvent.is_optional ? 'interested in' : 'for'} this event yet.
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="border-b">
-                    <tr className="text-left">
-                      <th className="pb-3 font-medium text-gray-700">Name</th>
-                      <th className="pb-3 font-medium text-gray-700">Phone</th>
-                      <th className="pb-3 font-medium text-gray-700">House</th>
-                      <th className="pb-3 font-medium text-gray-700">Transportation</th>
-                      <th className="pb-3 font-medium text-gray-700">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    {attendees.map((attendee) => (
-                      <tr key={attendee.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="py-3">
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="border-b">
+                      <tr className="text-left">
+                        <th className="pb-3 font-medium text-gray-700">Name</th>
+                        <th className="pb-3 font-medium text-gray-700">Phone</th>
+                        <th className="pb-3 font-medium text-gray-700">House</th>
+                        <th className="pb-3 font-medium text-gray-700">Transportation</th>
+                        <th className="pb-3 font-medium text-gray-700">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      {attendees.map((attendee) => (
+                        <tr key={attendee.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="py-3">
+                            <div className="flex items-center gap-2">
+                              <User className="h-4 w-4 text-gray-400" />
+                              <span className="font-medium text-gray-900">{attendee.name}</span>
+                            </div>
+                          </td>
+                          <td className="py-3">
+                            <a 
+                              href={`tel:${attendee.phone}`}
+                              className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                            >
+                              <Phone className="h-4 w-4" />
+                              <span className="text-sm font-medium">{formatPhoneNumber(attendee.phone)}</span>
+                            </a>
+                          </td>
+                          <td className="py-3">
+                            {attendee.property_name ? (
+                              <Badge variant="outline">{attendee.property_name}</Badge>
+                            ) : (
+                              <span className="text-gray-500">-</span>
+                            )}
+                          </td>
+                          <td className="py-3">
+                            {attendee.has_rental_car ? (
+                              <Badge variant="success" className="gap-1">
+                                <Car className="h-3 w-3" />
+                                Can Drive
+                              </Badge>
+                            ) : (
+                              <Badge variant="warning" className="gap-1">
+                                <Users className="h-3 w-3" />
+                                Needs Ride
+                              </Badge>
+                            )}
+                          </td>
+                          <td className="py-3">
+                            {attendee.checked_in ? (
+                              <Badge variant="success" className="gap-1">
+                                <CheckCircle2 className="h-3 w-3" />
+                                Checked In
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary" className="gap-1">
+                                <XCircle className="h-3 w-3" />
+                                Not Checked In
+                              </Badge>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4">
+                  {attendees.map((attendee) => (
+                    <Card key={attendee.id} className="p-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <User className="h-4 w-4 text-gray-400" />
+                            <User className="h-5 w-5 text-gray-400" />
                             <span className="font-medium text-gray-900">{attendee.name}</span>
                           </div>
-                        </td>
-                        <td className="py-3">
-                          <a 
-                            href={`tel:${attendee.phone}`}
-                            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors"
-                          >
-                            <Phone className="h-4 w-4" />
-                            <span className="text-sm font-medium">{formatPhoneNumber(attendee.phone)}</span>
-                          </a>
-                        </td>
-                        <td className="py-3">
-                          {attendee.property_name ? (
-                            <Badge variant="outline">{attendee.property_name}</Badge>
-                          ) : (
-                            <span className="text-gray-500">-</span>
-                          )}
-                        </td>
-                        <td className="py-3">
-                          {attendee.has_rental_car ? (
-                            <Badge variant="success" className="gap-1">
-                              <Car className="h-3 w-3" />
-                              Can Drive
-                            </Badge>
-                          ) : (
-                            <Badge variant="warning" className="gap-1">
-                              <Users className="h-3 w-3" />
-                              Needs Ride
-                            </Badge>
-                          )}
-                        </td>
-                        <td className="py-3">
                           {attendee.checked_in ? (
                             <Badge variant="success" className="gap-1">
                               <CheckCircle2 className="h-3 w-3" />
@@ -351,12 +381,51 @@ export function EventAttendanceReport() {
                               Not Checked In
                             </Badge>
                           )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <p className="text-gray-500 mb-1">Phone</p>
+                            <a 
+                              href={`tel:${attendee.phone}`}
+                              className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                            >
+                              <Phone className="h-3 w-3" />
+                              <span className="font-medium">{formatPhoneNumber(attendee.phone)}</span>
+                            </a>
+                          </div>
+
+                          <div>
+                            <p className="text-gray-500 mb-1">House</p>
+                            {attendee.property_name ? (
+                              <Badge variant="outline" className="text-xs">
+                                {attendee.property_name}
+                              </Badge>
+                            ) : (
+                              <span className="text-gray-400">-</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-gray-500 mb-1 text-sm">Transportation</p>
+                          {attendee.has_rental_car ? (
+                            <Badge variant="success" className="gap-1">
+                              <Car className="h-3 w-3" />
+                              Can Drive
+                            </Badge>
+                          ) : (
+                            <Badge variant="warning" className="gap-1">
+                              <Users className="h-3 w-3" />
+                              Needs Ride
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
