@@ -22,7 +22,7 @@ const houses: House[] = [
     id: 1,
     name: 'House 1',
     address: '1724 S Pacific St, Oceanside, CA',
-    coordinates: { lat: 33.1742249, lng: -117.3779 },
+    coordinates: { lat: 33.1742249, lng: -117.3660633 },
     bedrooms: 6,
     bathrooms: 5,
     maxOccupancy: 8,
@@ -32,7 +32,7 @@ const houses: House[] = [
     id: 2,
     name: 'House 2',
     address: '1722 S Pacific St, Oceanside, CA',
-    coordinates: { lat: 33.1742749, lng: -117.3779 },
+    coordinates: { lat: 33.1742249, lng: -117.3660633 },
     bedrooms: 6,
     bathrooms: 5,
     maxOccupancy: 8,
@@ -90,7 +90,7 @@ const mapContainerStyle = {
 // Center the map around the houses on South Pacific Street
 const center = {
   lat: 33.1793,
-  lng: -117.3767
+  lng: -117.3707
 };
 
 const options = {
