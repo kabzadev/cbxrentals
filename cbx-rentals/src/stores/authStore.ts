@@ -137,6 +137,11 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
+        const state = useAuthStore.getState();
+        trackEvent('Logout', { 
+          userType: state.userType,
+          username: state.username 
+        });
         set({
           isAuthenticated: false,
           username: null,

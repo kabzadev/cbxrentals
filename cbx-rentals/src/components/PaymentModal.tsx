@@ -6,6 +6,7 @@ import { useToast } from './ui/use-toast';
 import { formatCurrency } from '../lib/utils';
 import { Check, QrCode, DollarSign, CreditCard } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
+import { trackEvent, trackException } from '../lib/appInsights';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -42,6 +43,14 @@ export function PaymentModal({
       // Update the auth store with new payment status
       updatePaymentStatus(bookingId, true);
 
+      // Log payment completion
+      trackEvent('Payment Completed', {
+        attendeeName,
+        bookingId,
+        amount,
+        source: 'payment_modal'
+      });
+
       toast({
         title: 'Payment Recorded',
         description: 'Your payment has been recorded. Thank you!',
@@ -51,6 +60,12 @@ export function PaymentModal({
       onClose();
     } catch (error) {
       console.error('Error recording payment:', error);
+      trackException(error as Error, {
+        context: 'payment_modal',
+        attendeeName,
+        bookingId,
+        amount
+      });
       toast({
         title: 'Error',
         description: 'Failed to record payment. Please try again.',

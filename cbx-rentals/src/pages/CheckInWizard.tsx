@@ -13,6 +13,7 @@ import { formatCurrency } from '../lib/utils';
 import { supabase } from '../lib/supabase';
 import { PropertyImages } from '../components/properties/PropertyImages';
 import { useAuthStore } from '../stores/authStore';
+import { trackEvent, trackException } from '../lib/appInsights';
 
 interface WizardStep {
   id: number;
@@ -203,6 +204,23 @@ export function CheckInWizard() {
         checked_in: true,
         bookings: [updatedBooking]
       };
+
+      // Log payment completion and check-in
+      trackEvent('Payment Completed', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        bookingId: booking.id,
+        amount: booking.total_amount,
+        propertyName: booking.property?.name
+      });
+
+      trackEvent('Check-In Completed', {
+        attendeeName: attendee.name,
+        attendeeId: attendee.id,
+        method: 'payment_flow',
+        hasVehicle: attendee.has_rental_car,
+        propertyName: booking.property?.name
+      });
 
       // Authenticate the attendee with updated data
       loginAttendee(updatedAttendee);
@@ -872,6 +890,15 @@ export function CheckInWizard() {
 
                             // Update the attendee data with checked_in status
                             const updatedAttendee = { ...attendee, checked_in: true };
+                            
+                            // Log check-in without payment
+                            trackEvent('Check-In Completed', {
+                              attendeeName: attendee.name,
+                              attendeeId: attendee.id,
+                              method: 'without_payment',
+                              hasVehicle: attendee.has_rental_car,
+                              propertyName: booking.property?.name
+                            });
                             
                             // Authenticate the attendee
                             loginAttendee(updatedAttendee);

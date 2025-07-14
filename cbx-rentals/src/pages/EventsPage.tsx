@@ -9,6 +9,7 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { useToast } from '../components/ui/use-toast';
+import { trackEvent, trackException } from '../lib/appInsights';
 
 export function EventsPage() {
   const { userType, attendeeData } = useAuthStore();
@@ -89,6 +90,18 @@ export function EventsPage() {
             ...eventInterests,
             [eventId]: { ...existingInterest, is_interested: isInterested }
           });
+          
+          // Find event details for logging
+          const event = events.find(e => e.id === eventId);
+          trackEvent('Event Attendance Updated', {
+            eventId,
+            eventTitle: event?.title,
+            eventDate: event?.event_date,
+            attendeeName: attendeeData.name,
+            attendeeId: attendeeData.id,
+            isInterested,
+            action: isInterested ? 'attending' : 'not_attending'
+          });
         }
       } else {
         // Create new interest
@@ -107,10 +120,28 @@ export function EventsPage() {
             ...eventInterests,
             [eventId]: data
           });
+          
+          // Find event details for logging
+          const event = events.find(e => e.id === eventId);
+          trackEvent('Event Attendance Selected', {
+            eventId,
+            eventTitle: event?.title,
+            eventDate: event?.event_date,
+            attendeeName: attendeeData.name,
+            attendeeId: attendeeData.id,
+            isInterested,
+            action: isInterested ? 'attending' : 'not_attending'
+          });
         }
       }
     } catch (error) {
       console.error('Error updating event interest:', error);
+      trackException(error as Error, {
+        context: 'event_attendance',
+        eventId,
+        attendeeId: attendeeData.id,
+        isInterested
+      });
     }
   };
 

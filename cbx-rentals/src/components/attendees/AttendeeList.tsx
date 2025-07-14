@@ -27,6 +27,7 @@ import type { AttendeeWithBookings } from '../../types'
 import { useAuthStore } from '../../stores/authStore'
 import { supabase } from '../../lib/supabase'
 import { formatPhoneNumber } from '../../lib/formatters'
+import { trackEvent, trackException } from '../../lib/appInsights'
 
 type SortField = 'name' | 'checkIn' | 'checkedIn' | 'paymentStatus'
 type SortDirection = 'asc' | 'desc'
@@ -87,23 +88,48 @@ export function AttendeeList() {
 
   const handleCheckInToggle = async (attendeeId: string, currentStatus: boolean) => {
     try {
+      // Find attendee details for logging
+      const attendee = attendees.find(a => a.id === attendeeId);
+      const newStatus = !currentStatus;
+      
       const { error } = await supabase
         .from('attendees')
         .update({ 
-          checked_in: !currentStatus,
-          check_in_time: !currentStatus ? new Date().toISOString() : null
+          checked_in: newStatus,
+          check_in_time: newStatus ? new Date().toISOString() : null
         })
         .eq('id', attendeeId)
 
       if (error) {
         console.error('Error updating check-in status:', error)
+        trackException(error as Error, {
+          context: 'admin_checkin_toggle',
+          attendeeId,
+          currentStatus,
+          newStatus
+        })
         return
       }
+
+      // Log check-in toggle
+      trackEvent('Admin Check-In Toggle', {
+        attendeeId,
+        attendeeName: attendee?.name,
+        previousStatus: currentStatus,
+        newStatus,
+        action: newStatus ? 'checked_in' : 'checked_out',
+        adminUser: userType === 'admin' ? username : 'unknown'
+      })
 
       // Refresh the attendees list to show updated status
       window.location.reload()
     } catch (error) {
       console.error('Error updating check-in status:', error)
+      trackException(error as Error, {
+        context: 'admin_checkin_toggle',
+        attendeeId,
+        currentStatus
+      })
     }
   }
 
