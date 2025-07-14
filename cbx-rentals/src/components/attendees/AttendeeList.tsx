@@ -306,7 +306,7 @@ export function AttendeeList() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All</SelectItem>
-                      <SelectItem value="rental">Has Rental Car</SelectItem>
+                      <SelectItem value="rental">Has Vehicle</SelectItem>
                       <SelectItem value="pickup">Needs Airport Pickup</SelectItem>
                     </SelectContent>
                   </Select>
@@ -674,8 +674,8 @@ export function AttendeeList() {
                               <p className="text-gray-600">House: {bookingInfo.property}</p>
                               <div className="flex gap-2 mt-2">
                                 {attendee.has_rental_car && (
-                                  <Badge variant="outline" className="text-xs">
-                                    <Car className="h-3 w-3 mr-1" /> Rental Car
+                                  <Badge variant="outline" className="text-xs border-gray-300 text-gray-700">
+                                    <Car className="h-3 w-3 mr-1" /> Vehicle
                                   </Badge>
                                 )}
                                 {isAdmin && bookingInfo.isPaid && (
@@ -727,8 +727,8 @@ export function AttendeeList() {
                           <p className="text-gray-600">House: {bookingInfo.property}</p>
                           <div className="flex gap-2 mt-2">
                             {attendee.has_rental_car && (
-                              <Badge variant="outline" className="text-xs">
-                                <Car className="h-3 w-3 mr-1" /> Rental Car
+                              <Badge variant="outline" className="text-xs border-gray-300 text-gray-700">
+                                <Car className="h-3 w-3 mr-1" /> Vehicle
                               </Badge>
                             )}
                             {isAdmin && !bookingInfo.hasUnpaid && (
@@ -775,8 +775,8 @@ export function AttendeeList() {
                           <p className="text-gray-600">House: {bookingInfo.property}</p>
                           <div className="flex gap-2 mt-2">
                             {attendee.has_rental_car && (
-                              <Badge variant="outline" className="text-xs">
-                                <Car className="h-3 w-3 mr-1" /> Rental Car
+                              <Badge variant="outline" className="text-xs border-gray-300 text-gray-700">
+                                <Car className="h-3 w-3 mr-1" /> Vehicle
                               </Badge>
                             )}
                             {isAdmin && !bookingInfo.hasUnpaid && (
