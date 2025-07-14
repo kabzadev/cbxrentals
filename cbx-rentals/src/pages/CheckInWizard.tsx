@@ -48,8 +48,8 @@ export function CheckInWizard() {
   // Get attendee and booking data from navigation state
   const { attendee, booking } = location.state || {};
 
+  // Check authentication status and redirects
   useEffect(() => {
-    // Check if user is already checked in
     const checkAuthStatus = async () => {
       // If user is authenticated and already checked in, redirect to dashboard
       if (isAuthenticated && attendeeData?.checked_in) {
@@ -95,39 +95,7 @@ export function CheckInWizard() {
     };
 
     checkAuthStatus();
-  }, [isAuthenticated, attendeeData, navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e50914] mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // For off-site attendees or those without bookings who are already checked in,
-  // redirect to dashboard
-  if (!attendee && isAuthenticated && attendeeData?.checked_in) {
-    navigate('/dashboard');
-    return null;
-  }
-
-  if (!attendee || !booking) {
-    // If they're an off-site attendee (no booking), redirect to dashboard if checked in
-    if (isAuthenticated && attendeeData?.checked_in) {
-      navigate('/dashboard');
-      return null;
-    }
-    navigate('/check-in');
-    return null;
-  }
-
-  const property = booking.property;
-  const isPaid = booking.paid;
-  const datesModified = false; // Removed since dates_modified column doesn't exist
+  }, [isAuthenticated, attendeeData, navigate, attendee]);
 
   // Initialize dates and arrival details when data is available
   useEffect(() => {
@@ -145,12 +113,54 @@ export function CheckInWizard() {
       trackEvent('Check-In Wizard Started', {
         attendeeName: attendee.name,
         attendeeId: attendee.id,
-        propertyName: property?.name,
-        isPaid: isPaid,
+        propertyName: booking?.property?.name,
+        isPaid: booking?.paid,
         totalAmount: booking?.total_amount
       });
     }
   }, [booking, attendee]);
+
+  // Handle navigation after loading is complete
+  useEffect(() => {
+    if (!isLoading) {
+      // For off-site attendees or those without bookings who are already checked in,
+      // redirect to dashboard
+      if (!attendee && isAuthenticated && attendeeData?.checked_in) {
+        navigate('/dashboard');
+        return;
+      }
+
+      if (!attendee || !booking) {
+        // If they're an off-site attendee (no booking), redirect to dashboard if checked in
+        if (isAuthenticated && attendeeData?.checked_in) {
+          navigate('/dashboard');
+          return;
+        }
+        navigate('/check-in');
+        return;
+      }
+    }
+  }, [isLoading, attendee, booking, isAuthenticated, attendeeData, navigate]);
+
+  // Early returns after all hooks
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#e50914] mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!attendee || !booking) {
+    return null; // Navigation is handled in useEffect
+  }
+
+  const property = booking.property;
+  const isPaid = booking.paid;
+  const datesModified = false; // Removed since dates_modified column doesn't exist
 
   const handleConfirmDates = async () => {
     setIsProcessing(true);
