@@ -120,12 +120,12 @@ export const useAuthStore = create<AuthState>()(
 
             const attendee = attendees[0];
             
-            // Check if attendee is off-site (has a booking with property name "Off-site")
+            // Check if attendee is off-site (has a booking with property name "Off-site") or has no bookings
             const isOffsite = attendee.bookings?.some((booking: any) => 
               booking.property?.name === 'Off-site'
-            );
+            ) || !attendee.bookings?.length;
 
-            // If off-site and not already checked in, mark them as checked in
+            // If off-site (or no bookings) and not already checked in, mark them as checked in
             if (isOffsite && !attendee.checked_in) {
               const { error: updateError } = await supabase
                 .from('attendees')
@@ -205,12 +205,12 @@ export const useAuthStore = create<AuthState>()(
       },
 
       loginAttendee: async (attendeeData: AttendeeData) => {
-        // Check if attendee is off-site
+        // Check if attendee is off-site or has no bookings
         const isOffsite = attendeeData.bookings?.some(booking => 
           booking.property?.name === 'Off-site'
-        );
+        ) || !attendeeData.bookings?.length;
 
-        // If off-site and not already checked in, mark them as checked in
+        // If off-site (or no bookings) and not already checked in, mark them as checked in
         if (isOffsite && !attendeeData.checked_in) {
           const { error: updateError } = await supabase
             .from('attendees')
