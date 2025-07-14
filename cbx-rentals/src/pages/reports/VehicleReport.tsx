@@ -33,6 +33,7 @@ export function VehicleReport() {
 
   const loadAttendees = async () => {
     try {
+      console.log('Loading attendees with vehicles...');
       const { data, error } = await supabase
         .from('attendees')
         .select(`
@@ -45,7 +46,7 @@ export function VehicleReport() {
             id,
             check_in,
             check_out,
-            property:properties!inner (
+            property:properties (
               id,
               name,
               address
@@ -55,6 +56,7 @@ export function VehicleReport() {
         .eq('has_rental_car', true)
         .order('name');
 
+      console.log('Query result:', { data, error });
       if (error) throw error;
       setAttendees(data || []);
     } catch (error) {
@@ -67,7 +69,7 @@ export function VehicleReport() {
   if (loading) {
     return (
       <div className="p-6">
-        <h1 className="text-3xl font-bold mb-6">Vehicle Report</h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-900">Vehicle Report</h1>
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
             <Card key={i}>
@@ -86,7 +88,7 @@ export function VehicleReport() {
   return (
     <div className="p-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold">Vehicle Report</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Vehicle Report</h1>
           <p className="text-gray-600 mt-2">
             Total attendees with vehicles: {attendees.length}
           </p>
