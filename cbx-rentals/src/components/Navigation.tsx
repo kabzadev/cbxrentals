@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera, Activity, LogIn, CalendarCheck } from 'lucide-react';
+import { Home, Users, LogOut, UserCheck, Menu, X, CalendarIcon, MapPin, FileText, ChevronDown, Car, UserPlus, Camera, Activity, LogIn, CalendarCheck, DollarSign } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useState } from 'react';
@@ -124,6 +124,13 @@ export function Navigation() {
                     >
                       <CalendarCheck className="w-4 h-4 mr-2" />
                       Event Attendance
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => navigate('/reports/payment')}
+                      className="text-gray-200 hover:bg-[#505050] hover:text-white cursor-pointer"
+                    >
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Payment Report
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -299,6 +306,21 @@ export function Navigation() {
                   <div className="flex items-center">
                     <CalendarCheck className="w-4 h-4 mr-2" />
                     Event Attendance
+                  </div>
+                </Link>
+                <Link
+                  to="/reports/payment"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "block pl-8 pr-4 py-2 text-base font-medium",
+                    location.pathname === '/reports/payment'
+                      ? "bg-black text-white"
+                      : "text-gray-400 hover:bg-[#505050] hover:text-gray-200"
+                  )}
+                >
+                  <div className="flex items-center">
+                    <DollarSign className="w-4 h-4 mr-2" />
+                    Payment Report
                   </div>
                 </Link>
                 

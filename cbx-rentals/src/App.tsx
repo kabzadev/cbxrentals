@@ -14,6 +14,7 @@ import { RideShareReport } from './pages/reports/RideShareReport'
 import { LoginActivityReport } from './pages/reports/LoginActivityReport'
 import { CheckInActivityReport } from './pages/reports/CheckInActivityReport'
 import { EventAttendanceReport } from './pages/reports/EventAttendanceReport'
+import { PaymentReport } from './pages/reports/PaymentReport'
 import { UpdateRentalCars } from './pages/admin/UpdateRentalCars'
 import { PhotosPage } from './pages/PhotosPage'
 import { PhotosManagement } from './pages/admin/PhotosManagement'
@@ -56,6 +57,7 @@ function App() {
               <Route path="/reports/login-activity" element={<LoginActivityReport />} />
               <Route path="/reports/checkin-activity" element={<CheckInActivityReport />} />
               <Route path="/reports/event-attendance" element={<EventAttendanceReport />} />
+              <Route path="/reports/payment" element={<PaymentReport />} />
               <Route path="/admin/update-rental-cars" element={<UpdateRentalCars />} />
               <Route path="/admin/photos" element={<PhotosManagement />} />
             </Route>
