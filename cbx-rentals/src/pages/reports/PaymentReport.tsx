@@ -19,6 +19,7 @@ interface PaymentData {
   total_amount: number;
   paid_amount: number;
   payment_status: 'unpaid' | 'partial' | 'paid';
+  payment_method: 'venmo' | 'zelle' | 'paypal' | 'cash' | null;
   arrival_date: string;
   exit_date: string;
 }
@@ -37,7 +38,7 @@ const PaymentReport: React.FC = () => {
   const [groupedData, setGroupedData] = useState<HouseGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingBooking, setEditingBooking] = useState<string | null>(null);
-  const [editValues, setEditValues] = useState<{ [key: string]: { paid_amount: number; payment_status: string } }>({});
+  const [editValues, setEditValues] = useState<{ [key: string]: { paid_amount: number; payment_status: string; payment_method: string | null } }>({});
 
   useEffect(() => {
     fetchPaymentData();
@@ -56,6 +57,7 @@ const PaymentReport: React.FC = () => {
           paid,
           paid_amount,
           payment_status,
+          payment_method,
           arrival_date,
           exit_date,
           attendees!inner(
@@ -86,6 +88,7 @@ const PaymentReport: React.FC = () => {
           total_amount: booking.total_amount,
           paid_amount: booking.paid_amount || (booking.paid ? booking.total_amount : 0),
           payment_status: booking.payment_status || (booking.paid ? 'paid' : 'unpaid'),
+          payment_method: booking.payment_method || null,
           arrival_date: booking.arrival_date,
           exit_date: booking.exit_date
         };
@@ -125,11 +128,11 @@ const PaymentReport: React.FC = () => {
     setGroupedData(sortedGroups);
   };
 
-  const handleEdit = (bookingId: string, currentPaidAmount: number, currentStatus: string) => {
+  const handleEdit = (bookingId: string, currentPaidAmount: number, currentStatus: string, currentMethod: string | null) => {
     setEditingBooking(bookingId);
     setEditValues({
       ...editValues,
-      [bookingId]: { paid_amount: currentPaidAmount, payment_status: currentStatus }
+      [bookingId]: { paid_amount: currentPaidAmount, payment_status: currentStatus, payment_method: currentMethod }
     });
   };
 
@@ -160,7 +163,8 @@ const PaymentReport: React.FC = () => {
         .update({
           paid: paymentStatus === 'paid',
           paid_amount: paidAmount,
-          payment_status: paymentStatus
+          payment_status: paymentStatus,
+          payment_method: values.payment_method
         })
         .eq('id', bookingId);
 
@@ -169,7 +173,7 @@ const PaymentReport: React.FC = () => {
       // Update local state
       const updatedData = paymentData.map(p => 
         p.booking_id === bookingId 
-          ? { ...p, paid_amount: paidAmount, payment_status: paymentStatus as 'unpaid' | 'partial' | 'paid' }
+          ? { ...p, paid_amount: paidAmount, payment_status: paymentStatus as 'unpaid' | 'partial' | 'paid', payment_method: values.payment_method as 'venmo' | 'zelle' | 'paypal' | 'cash' | null }
           : p
       );
       
@@ -269,6 +273,7 @@ const PaymentReport: React.FC = () => {
                         <th className="text-right p-2">Total Due</th>
                         <th className="text-right p-2">Paid Amount</th>
                         <th className="text-center p-2">Status</th>
+                        <th className="text-center p-2">Method</th>
                         <th className="text-center p-2">Actions</th>
                       </tr>
                     </thead>
@@ -331,6 +336,35 @@ const PaymentReport: React.FC = () => {
                           </td>
                           <td className="p-2 text-center">
                             {editingBooking === attendee.booking_id ? (
+                              <Select
+                                value={editValues[attendee.booking_id]?.payment_method || attendee.payment_method || ''}
+                                onValueChange={(value) => setEditValues({
+                                  ...editValues,
+                                  [attendee.booking_id]: {
+                                    ...editValues[attendee.booking_id],
+                                    payment_method: value || null
+                                  }
+                                })}
+                              >
+                                <SelectTrigger className="w-28">
+                                  <SelectValue placeholder="None" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="">None</SelectItem>
+                                  <SelectItem value="venmo">Venmo</SelectItem>
+                                  <SelectItem value="zelle">Zelle</SelectItem>
+                                  <SelectItem value="paypal">PayPal</SelectItem>
+                                  <SelectItem value="cash">Cash</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <span className="text-sm capitalize">
+                                {attendee.payment_method || '-'}
+                              </span>
+                            )}
+                          </td>
+                          <td className="p-2 text-center">
+                            {editingBooking === attendee.booking_id ? (
                               <div className="flex gap-2 justify-center">
                                 <Button
                                   size="sm"
@@ -350,7 +384,7 @@ const PaymentReport: React.FC = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => handleEdit(attendee.booking_id, attendee.paid_amount, attendee.payment_status)}
+                                onClick={() => handleEdit(attendee.booking_id, attendee.paid_amount, attendee.payment_status, attendee.payment_method)}
                               >
                                 Edit
                               </Button>
