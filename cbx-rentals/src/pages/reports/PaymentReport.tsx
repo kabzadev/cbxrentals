@@ -32,6 +32,12 @@ interface HouseGroup {
   total_paid: number;
 }
 
+// Parse dates as local dates (not UTC) to avoid timezone issues
+const parseLocalDate = (dateStr: string) => {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
 const PaymentReport: React.FC = () => {
   const navigate = useNavigate();
   const [paymentData, setPaymentData] = useState<PaymentData[]>([]);
@@ -287,7 +293,7 @@ const PaymentReport: React.FC = () => {
                             </div>
                           </td>
                           <td className="p-2 text-sm">
-                            {format(new Date(attendee.arrival_date), 'MMM dd')} - {format(new Date(attendee.exit_date), 'MMM dd')}
+                            {format(parseLocalDate(attendee.arrival_date), 'MMM dd')} - {format(parseLocalDate(attendee.exit_date), 'MMM dd')}
                           </td>
                           <td className="p-2 text-right">${attendee.total_amount.toFixed(2)}</td>
                           <td className="p-2 text-right">
