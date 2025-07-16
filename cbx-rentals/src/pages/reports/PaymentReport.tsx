@@ -132,7 +132,7 @@ const PaymentReport: React.FC = () => {
     setEditingBooking(bookingId);
     setEditValues({
       ...editValues,
-      [bookingId]: { paid_amount: currentPaidAmount, payment_status: currentStatus, payment_method: currentMethod }
+      [bookingId]: { paid_amount: currentPaidAmount, payment_status: currentStatus, payment_method: currentMethod || 'none' }
     });
   };
 
@@ -164,7 +164,7 @@ const PaymentReport: React.FC = () => {
           paid: paymentStatus === 'paid',
           paid_amount: paidAmount,
           payment_status: paymentStatus,
-          payment_method: values.payment_method
+          payment_method: values.payment_method === 'none' ? null : values.payment_method
         })
         .eq('id', bookingId);
 
@@ -173,7 +173,7 @@ const PaymentReport: React.FC = () => {
       // Update local state
       const updatedData = paymentData.map(p => 
         p.booking_id === bookingId 
-          ? { ...p, paid_amount: paidAmount, payment_status: paymentStatus as 'unpaid' | 'partial' | 'paid', payment_method: values.payment_method as 'venmo' | 'zelle' | 'paypal' | 'cash' | null }
+          ? { ...p, paid_amount: paidAmount, payment_status: paymentStatus as 'unpaid' | 'partial' | 'paid', payment_method: (values.payment_method === 'none' ? null : values.payment_method) as 'venmo' | 'zelle' | 'paypal' | 'cash' | null }
           : p
       );
       
@@ -337,12 +337,12 @@ const PaymentReport: React.FC = () => {
                           <td className="p-2 text-center">
                             {editingBooking === attendee.booking_id ? (
                               <Select
-                                value={editValues[attendee.booking_id]?.payment_method || attendee.payment_method || ''}
+                                value={editValues[attendee.booking_id]?.payment_method || attendee.payment_method || 'none'}
                                 onValueChange={(value) => setEditValues({
                                   ...editValues,
                                   [attendee.booking_id]: {
                                     ...editValues[attendee.booking_id],
-                                    payment_method: value || null
+                                    payment_method: value === 'none' ? null : value
                                   }
                                 })}
                               >
@@ -350,7 +350,7 @@ const PaymentReport: React.FC = () => {
                                   <SelectValue placeholder="None" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="">None</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
                                   <SelectItem value="venmo">Venmo</SelectItem>
                                   <SelectItem value="zelle">Zelle</SelectItem>
                                   <SelectItem value="paypal">PayPal</SelectItem>
